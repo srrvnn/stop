@@ -9,16 +9,16 @@ public class _index {
         //-- TRAINING MODULE TO BUILD MODELS         
         
         //--------------------------------  
-        //-- Break all images to pixels and store them in a file.
+        //-- Break all images to pixels and store a list of all pixels in files.
 
         Break b = new Break(); 
         
-        b.GetImages("_labels");
+        b.GetImages("_newlabels");
         b.WriteTrainToFile("trainpixels.txt");
         b.WriteTestToFile("testpixels.txt");
-        
+
         //--------------------------------
-        //-- Make training file with all the points in the train pixels file.        
+        //-- Make training .arff file with all the pixels in the train pixels file.        
         
         Note n = new Note();
         
@@ -33,10 +33,19 @@ public class _index {
         n.SetToFile("ambiguous.arff");        
         n.SetFeatures(f);   
         n.SetCondition("OnlyAmbiguous");     
-        n.NoteFeatures("ambiguous");     
+        n.NoteFeatures("ambiguous");   
+
+        n.SetFromFile("testpixels.txt");
+        n.SetToFile("test.arff");        
+        n.SetTest();
+        n.SetFeatures(f); 
+        n.SetCondition("");     
+        n.NoteFeatures("screener");   
+
+        System.exit(1);
 
         //--------------------------------
-        //-- Build the screener model
+        //-- Build the screener model using the .arff file.
 
         Test t = new Test(); 
         
@@ -56,45 +65,44 @@ public class _index {
         //--------------------------------
         //-- Make training files with all the points in the three clustered pixels files.
 
-        n.SetFromFile("aclassifier.txt");
-        n.SetToFile("aclassifier.arff");
-        n.SetFeatures(f);
-        n.NoteFeatures("aclassifier");
+        // n.SetFromFile("aclassifier.txt");
+        // n.SetToFile("aclassifier.arff");
+        // n.SetFeatures(f);
+        // n.NoteFeatures("aclassifier");
 
-        n.SetFromFile("bclassifier.txt");
-        n.SetToFile("bclassifier.arff");
-        n.SetFeatures(f);
-        n.NoteFeatures("bclassifier");
+        // n.SetFromFile("bclassifier.txt");
+        // n.SetToFile("bclassifier.arff");
+        // n.SetFeatures(f);
+        // n.NoteFeatures("bclassifier");
 
-        n.SetFromFile("cclassifier.txt");
-        n.SetToFile("cclassifier.arff");
-        n.SetFeatures(f);
-        n.NoteFeatures("cclassifier");        
+        // n.SetFromFile("cclassifier.txt");
+        // n.SetToFile("cclassifier.arff");
+        // n.SetFeatures(f);
+        // n.NoteFeatures("cclassifier");        
 
         //--------------------------------
         //-- Build the classifier models
 
-        t.SetTrainFile("aclassifier.arff","aclassifier");        
-        t.BuildModel("J48");
+        // t.SetTrainFile("aclassifier.arff","aclassifier");        
+        // t.BuildModel("J48");
 
-        t.SetTrainFile("bclassifier.arff","bclassifier");        
-        t.BuildModel("J48");
+        // t.SetTrainFile("bclassifier.arff","bclassifier");        
+        // t.BuildModel("J48");
 
-        t.SetTrainFile("cclassifier.arff","cclassifier");        
-        t.BuildModel("J48");
+        // t.SetTrainFile("cclassifier.arff","cclassifier");        
+        // t.BuildModel("J48");
 
         //-- TESTING MODULE TO LABEL IMAGES
 
         //--------------------------------
         //-- Make test file with all the points in the test pixels file.
 
-        // n.SetFromFile("testpixels.txt");
-        // n.SetToFile("test.arff");        
-        // n.SetTest();
-        // n.SetFeatures(f);        
-        // n.NoteFeatures("screener");        
+             
 
-        // t.Run();
+        //t.SetUseModel("screener");
+        t.Run();
+        // t.WriteResults("screenerresult.txt");
+
         
     }
 

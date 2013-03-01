@@ -16,9 +16,7 @@ public class Cluster
 	String[] file_clusters;
 
 	Cluster()
-	{
-
-	}
+	{}
 
 	public void SetSource(String s)
 	{
@@ -33,7 +31,7 @@ public class Cluster
 	public void Run() throws FileNotFoundException, IOException, Exception
 	{
 
-		BufferedReader cr = new BufferedReader(new FileReader(file_source));
+		BufferedReader cr = new BufferedReader(new FileReader("data/"+file_source));
        	Instances cd = new Instances(cr);
 
        	String[] options = new String[2];
@@ -57,7 +55,7 @@ public class Cluster
        	String cc2 = kmeans.getClusterCentroids().instance(1).toString();  
        	String cc3 = kmeans.getClusterCentroids().instance(2).toString();
 
-       	BufferedWriter cw0 = new BufferedWriter(new FileWriter(file_clusters[0]));
+       	BufferedWriter cw0 = new BufferedWriter(new FileWriter("data/"+file_clusters[0]));
 
        	cw0.write(cc1); cw0.newLine();
        	cw0.write(cc2); cw0.newLine();
@@ -70,11 +68,11 @@ public class Cluster
        	int counter = 0; 
 
        	cr.close();
-       	cr = new BufferedReader(new FileReader(file_source));
+       	cr = new BufferedReader(new FileReader("data/"+file_source));
 
-       	BufferedWriter[] cw = {new BufferedWriter(new FileWriter(file_clusters[1])),
-                     new BufferedWriter(new FileWriter(file_clusters[2])),
-                     new BufferedWriter(new FileWriter(file_clusters[3]))};
+       	BufferedWriter[] cw = {new BufferedWriter(new FileWriter("data/"+file_clusters[1])),
+                     new BufferedWriter(new FileWriter("data/"+file_clusters[2])),
+                     new BufferedWriter(new FileWriter("data/"+file_clusters[3]))};
        							
 
        	do{

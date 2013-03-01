@@ -6,6 +6,8 @@ import weka.classifiers.*;
 import weka.classifiers.bayes.NaiveBayes;
 import weka.classifiers.trees.J48;
 
+import weka.classifiers.evaluation.NominalPrediction;
+
 public class Test {
     
     String name_trainfile;
@@ -29,6 +31,7 @@ public class Test {
     {
         name_trainfile = new String(s);
         name_trainer = new String(str);
+        name_model = new String(s);
     }
     
     public void SetTestFile(String s)
@@ -36,16 +39,15 @@ public class Test {
         name_testfile = new String(s);
     }
     
-    // public void SetUseModel(String s)
-    // {
-    //     usemodel = true; 
-    //     name_model = new String(s);
-    // }
+    public void SetUseModel(String s)
+    {        
+        name_model = new String(s);
+    }
     
     public void BuildModel(String s) throws FileNotFoundException, IOException, Exception
     {
 
-            BufferedReader f = new BufferedReader(new FileReader(name_trainfile));
+            BufferedReader f = new BufferedReader(new FileReader("data/"+name_trainfile));
             Instances d = new Instances(f);
             d.setClassIndex(d.numAttributes()-1);
             f.close(); 
@@ -57,7 +59,7 @@ public class Test {
 
             cl.buildClassifier(d);
             
-            ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(name_trainer+".model"));
+            ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(name_model+".model"));
             
             oos.writeObject(cl);
             oos.flush();
@@ -68,15 +70,15 @@ public class Test {
     public void Run() throws FileNotFoundException, IOException, Exception
     {
 
-            BufferedReader f = new BufferedReader(new FileReader(name_trainfile));
+            BufferedReader f = new BufferedReader(new FileReader("data/"+name_trainer));
             Instances d = new Instances(f);
             d.setClassIndex(d.numAttributes()-1);
             f.close(); 
 
-            Classifier cl = (Classifier) weka.core.SerializationHelper.read(name_trainer+".model");
+            Classifier cl = (Classifier) weka.core.SerializationHelper.read("data/"+name_model+".model");
             Evaluation e = new Evaluation(d);
 
-            BufferedReader tr = new BufferedReader(new FileReader(name_testfile));
+            BufferedReader tr = new BufferedReader(new FileReader("data/"+name_testfile));
             Instances td = new Instances(tr);
             td.setClassIndex(td.numAttributes()-1);
             tr.close();          
@@ -84,10 +86,31 @@ public class Test {
             e.evaluateModel(cl, td);            
             show("Evaluation Complete.");
             show(e.toSummaryString());
-        
-    }       
-    
-    
+
+            // BufferedWriter w = new BufferedWriter(new FileWriter(name_model+"-results.txt"));
+            // f = new BufferedReader(new FileReader(name_trainer));
+
+            // String line; 
+            // int counter = 0;
+
+            // do{
+            //     line = cr.readLine();
+            // }while(!line.equals("@attribute"));
+
+
+
+            // while((line = f.readLine()) != null){
+            //     try{
+            //         NominalPrediction n = (NominalPrediction) e.predictions().elementAt(counter);    
+            //     }
+            //     catch(Exception e){
+            //         System.out.println(line);
+            //     }
+            // }
+            
+    }  
+
+
     private static void show(String message){
         
         show(1,message);        

@@ -19,133 +19,141 @@ public class Break {
         list_trainimages = null;                
     }
     
+
+    // Collects all the images in the given folder into lists: list_testimages, and list_trainimages. 
+
     public void GetImages(String folder_images)
     {
         
         show(0,"Collecting all images. . .");        
         
-         ArrayList<String> list_images = h_getFiles(new File("_labels"));         
-         int no_images = list_images.size();
-                    
-         show(". . .Done.");        
+        ArrayList<String> list_images = h_getFiles(new File(folder_images));         
+        int no_images = list_images.size();
+                   
+        show(". . .Done.");        
         
-         int no_testimages = no_images / 6; 
+        int no_testimages = no_images / 6; 
         
-         list_trainimages = new ArrayList<String>();
-         list_testimages = new ArrayList<String>(); 
+        list_trainimages = new ArrayList<String>();
+        list_testimages = new ArrayList<String>(); 
 
-         int count_testimages = 0;         
-         Random r = new Random();            
-        
-         String[] forcedtests1 = {  
-             "_labels\\s3 bright (1)\\s3b1-01.png", "_labels\\s3 bright (1)\\s3b1-02.png",            
-             "_labels\\s3 bright (1)\\s3b1-028.png", "_labels\\s3 bright (1)\\s3b1-029.png",                        
-         };
-        
-         for( String f : forcedtests1){
-             list_testimages.add(f);         
-             list_images.remove(f);
-             ++count_testimages;
-         }
-        
-        
-         while(count_testimages < no_testimages/3){
-            
-             String s = list_images.get(r.nextInt(list_images.size()));
+        int count_testimages = 0;         
+        Random r = new Random();     
 
-             if(s.indexOf("bright")!=-1){
+        while(count_testimages < no_testimages){
+            
+            String s = list_images.get(r.nextInt(list_images.size()));            
                 
-                 list_testimages.add(s);         
-                 list_images.remove(s);
-                 ++count_testimages;
-             }
-            
-         }
-        
-         String[] forcedtests2 = {  
-             "_labels\\s1 clear (2)\\s1b1-01.png", "_labels\\s1 clear (2)\\s1b1-02.png",            
-             "_labels\\s1 clear (2)\\s1b1-029.png", "_labels\\s1 clear (2)\\s1b1-030.png",            
-             "_labels\\s1 clear (2)\\s1b2-01.png", "_labels\\s1 clear (2)\\s1b2-02.png",            
-             "_labels\\s1 clear (2)\\s1b2-029.png", "_labels\\s1 clear (2)\\s1b2-030.png",            
-         };
-        
-         for( String f : forcedtests2){
-             list_testimages.add(f);         
-             list_images.remove(f);
-             ++count_testimages;
-         }
-        
-         while(count_testimages < (int)(no_testimages/1.5)){
-            
-             String s = list_images.get(r.nextInt(list_images.size()));
-            
-             if(s.indexOf("clear")!=-1){
-                
-                 list_testimages.add(s);         
-                 list_images.remove(s);
-                 ++count_testimages;
-             }
-            
-         }
-        
-     //-- 1.5 Choose 1/18 dark test images.         
-        
-         String[] forcedtests3 = {  
-             "_labels\\s2 dark (2)\\s2b1-011.png", "_labels\\s2 dark (2)\\s2b1-012.png",            
-             "_labels\\s2 dark (2)\\s2b1-028.png", "_labels\\s2 dark (2)\\s2b1-029.png",                        
-             "_labels\\s2 dark (2)\\s2b2-01.png", "_labels\\s2 dark (2)\\s2b2-02.png",            
-             "_labels\\s2 dark (2)\\s2b2-029.png", "_labels\\s2 dark (2)\\s2b2-030.png",                        
-         };
-        
-         for( String f : forcedtests3){
-             list_testimages.add(f);         
-             list_images.remove(f);
-             ++count_testimages;
-         }
-        
-         while(count_testimages < no_testimages){
-            
-             String s = list_images.get(r.nextInt(list_images.size()));
-            
-             if(s.indexOf("dark")!=-1){
-                
-                 list_testimages.add(s);         
-                 list_images.remove(s);
-                 ++count_testimages;
-             }
-         }
+            list_testimages.add(s);         
+            list_images.remove(s);
+            ++count_testimages;     
+        }       
 
+       
+        // String[] forcedtests1 = {  
+        //      "_labels\\s3 bright (1)\\s3b1-01.png", "_labels\\s3 bright (1)\\s3b1-02.png",            
+        //      "_labels\\s3 bright (1)\\s3b1-028.png", "_labels\\s3 bright (1)\\s3b1-029.png"};                        
+                                            
         
-    //-- 1.6 All other images will be used to build classifiers.
+        // for( String f : forcedtests1){
+        //      list_testimages.add(f);         
+        //      list_images.remove(f);
+        //      ++count_testimages;
+        // }
         
+        // while(count_testimages < no_testimages/3){
+            
+        //     String s = list_images.get(r.nextInt(list_images.size()));
+
+        //     if(s.indexOf("bright")!=-1){
+                
+        //         list_testimages.add(s);         
+        //         list_images.remove(s);
+        //         ++count_testimages;
+        //     }
+            
+        // }
+        
+        // String[] forcedtests2 = {  
+        //     "_labels\\s1 clear (2)\\s1b1-01.png", "_labels\\s1 clear (2)\\s1b1-02.png",            
+        //     "_labels\\s1 clear (2)\\s1b1-029.png", "_labels\\s1 clear (2)\\s1b1-030.png",            
+        //     "_labels\\s1 clear (2)\\s1b2-01.png", "_labels\\s1 clear (2)\\s1b2-02.png",            
+        //     "_labels\\s1 clear (2)\\s1b2-029.png", "_labels\\s1 clear (2)\\s1b2-030.png",            
+        // };
+        
+        // for( String f : forcedtests2){
+        //     list_testimages.add(f);         
+        //     list_images.remove(f);
+        //     ++count_testimages;
+        // }
+        
+        // while(count_testimages < (int)(no_testimages/1.5)){
+           
+        //     String s = list_images.get(r.nextInt(list_images.size()));
+           
+        //     if(s.indexOf("clear")!=-1){
+               
+        //         list_testimages.add(s);         
+        //         list_images.remove(s);
+        //         ++count_testimages;
+        //     }
+           
+        // }
+                
+        // String[] forcedtests3 = {  
+        //     "_labels\\s2 dark (2)\\s2b1-011.png", "_labels\\s2 dark (2)\\s2b1-012.png",            
+        //     "_labels\\s2 dark (2)\\s2b1-028.png", "_labels\\s2 dark (2)\\s2b1-029.png",                        
+        //     "_labels\\s2 dark (2)\\s2b2-01.png", "_labels\\s2 dark (2)\\s2b2-02.png",            
+        //     "_labels\\s2 dark (2)\\s2b2-029.png", "_labels\\s2 dark (2)\\s2b2-030.png",                        
+        // };
+        
+        // for( String f : forcedtests3){
+        //     list_testimages.add(f);         
+        //     list_images.remove(f);
+        //     ++count_testimages;
+        // }
+        
+        // while(count_testimages < no_testimages){
+           
+        //     String s = list_images.get(r.nextInt(list_images.size()));
+           
+        //     if(s.indexOf("dark")!=-1){
+               
+        //         list_testimages.add(s);         
+        //         list_images.remove(s);
+        //         ++count_testimages;
+        //     }
+        // } 
+
         list_trainimages.addAll(list_images);        
         
         show("training images: "+list_trainimages.size());
         show("test images: "+list_testimages.size());        
-        
+    
     }
     
-    public void WriteTrainToFile(String name_file) throws IOException{
+    public void WriteTrainToFile(String name_file) throws IOException
+    {
         
         BufferedImage img, imgl; 
         
-        BufferedWriter fout = new BufferedWriter(new FileWriter(name_file));
+        BufferedWriter fout = new BufferedWriter(new FileWriter("data/"+name_file));
         
         long count_pixels = 0;
         
-        for( String image : list_trainimages ){           
+        for( String image : list_trainimages ){
         
             String t1 = image.substring(0,image.lastIndexOf("\\")+1);
             String t2 = image.substring(image.lastIndexOf("\\")+1,image.length());
             
             String IMG = image;
-            String IMGL = t1+"l-"+t2;
+            String IMGL = t1+"I-"+t2;
             
             ArrayList<ArrayList<Integer>> IMGCLASS = new ArrayList<ArrayList<Integer>>();                                
             
+            img = ImageIO.read(new File(IMG)); 
             imgl = ImageIO.read(new File(IMGL)); 
             int[] rgb;
-
             
             for(int i=0; i< imgl.getHeight(); i++){
 
@@ -154,18 +162,17 @@ public class Break {
 
                         rgb = h_getPixelData(imgl, i, j);                                                   
 
-                        if(h_isWhite(rgb)) row.add(1);
-                        else if(h_isBlack(rgb)) row.add(-1); 
-                        else row.add(0);                                    
+                        if(h_isRed(rgb)) row.add(0);
+                        else if(h_isYellow(rgb)) row.add(1); 
+                        else if(h_isBlue(rgb)) row.add(2);
+                        else if(h_isGreen(rgb)) row.add(3);
+                        else row.add(-1);                  
                 }
 
                 IMGCLASS.add(row);                    
             }
-
-            img = ImageIO.read(new File(IMG)); 
-           
-            int[] argb = {0,0,0};
             
+            int[] argb = {0,0,0};            
             int[] hsi = new int[3]; 
             int[] ycbcr =  new int[3];  
             
@@ -174,14 +181,17 @@ public class Break {
             for(i=0; i< img.getHeight(); i++){
                 for(j=0; j < img.getWidth(); j++){
                                       
-                    rgb = h_getPixelData(img, i, j);                                                                                                                       
-                    
+                    rgb = h_getPixelData(img, i, j);                                                                                                                                         
+
+                    if((IMGCLASS.get(i)).get(j) == -1){ continue; }
+
                     fout.write(rgb[0]+","+rgb[1]+","+rgb[2]);
                     count_pixels++;
                     
-                    if((IMGCLASS.get(i)).get(j) == 1){ fout.write(",red"); fout.newLine(); }
-                    else if((IMGCLASS.get(i)).get(j) == -1){ fout.write(",notred"); fout.newLine();}                   
-                    else{ fout.write(",ambiguousred"); fout.newLine(); }                                           
+                    if((IMGCLASS.get(i)).get(j) == 0){ fout.write(",red"); fout.newLine(); }
+                    else if((IMGCLASS.get(i)).get(j) == 1){ fout.write(",notred"); fout.newLine();}                   
+                    else if((IMGCLASS.get(i)).get(j) == 2){ fout.write(",ambiguousred"); fout.newLine();}                   
+                    else if((IMGCLASS.get(i)).get(j) == 3){ fout.write(",ambiguousnotred"); fout.newLine();}                                       
                 }                
             }                
         
@@ -193,11 +203,12 @@ public class Break {
         
     }
     
-    public void WriteTestToFile(String name_file) throws IOException{
+    public void WriteTestToFile(String name_file) throws IOException
+    {
         
         BufferedImage img, imgl; 
         
-        BufferedWriter fout = new BufferedWriter(new FileWriter(name_file));
+        BufferedWriter fout = new BufferedWriter(new FileWriter("data/"+name_file));
         
         long count_pixels = 0;
         
@@ -207,7 +218,7 @@ public class Break {
             String t2 = image.substring(image.lastIndexOf("\\")+1,image.length());
             
             String IMG = image;
-            String IMGL = t1+"l-"+t2;
+            String IMGL = t1+"I-"+t2;
             
             ArrayList<ArrayList<Integer>> IMGCLASS = new ArrayList<ArrayList<Integer>>();                                
             
@@ -222,9 +233,11 @@ public class Break {
 
                         rgb = h_getPixelData(imgl, i, j);                                                   
 
-                        if(h_isWhite(rgb)) row.add(1);
-                        else if(h_isBlack(rgb)) row.add(-1); 
-                        else row.add(0);                                    
+                        if(h_isRed(rgb)) row.add(0);
+                        else if(h_isYellow(rgb)) row.add(1); 
+                        else if(h_isBlue(rgb)) row.add(2);
+                        else if(h_isGreen(rgb)) row.add(3); 
+                        else row.add(-1);                                        
                 }
 
                 IMGCLASS.add(row);                    
@@ -243,14 +256,16 @@ public class Break {
                 for(j=0; j < img.getWidth(); j++){
                                       
                     rgb = h_getPixelData(img, i, j);                                                                                                                       
+
+                    if((IMGCLASS.get(i)).get(j) == -1){ continue; }
                     
                     fout.write(rgb[0]+","+rgb[1]+","+rgb[2]);
                     count_pixels++;
                     
-                    if((IMGCLASS.get(i)).get(j) == 1){ fout.write(",red"); fout.newLine(); }
-                    else if((IMGCLASS.get(i)).get(j) == -1){ fout.write(",notred"); fout.newLine();}                   
-                    else{ fout.write(",ambiguousred"); fout.newLine(); }       
-                                    
+                    if((IMGCLASS.get(i)).get(j) == 0){ fout.write(",red"); fout.newLine(); }
+                    else if((IMGCLASS.get(i)).get(j) == 1){ fout.write(",notred"); fout.newLine();}                   
+                    else if((IMGCLASS.get(i)).get(j) == 2){ fout.write(",ambiguousred"); fout.newLine();}                   
+                    else if((IMGCLASS.get(i)).get(j) == 3){ fout.write(",ambiguousnotred"); fout.newLine();}                                                                           
                 }                
             }                
         
@@ -261,13 +276,9 @@ public class Break {
         show(count_pixels+" test pixels filed.");
         
     }
-
-    public static void main(String[] args)
+  
+    private int[] h_getPixelData(BufferedImage img, int x, int y) 
     {
-        System.out.println("Hey!");        
-    }
-    
-    private static int[] h_getPixelData(BufferedImage img, int x, int y) {
         
         int h = img.getHeight(); 
         int w = img.getWidth(); 
@@ -293,47 +304,82 @@ public class Break {
         }
       
         return rgb;
+
     }
     
-    public static boolean h_isWhite(int[] rgb){
+    public boolean h_isWhite(int[] rgb)
+    {
         
         if(rgb[0] > 160) return true;
-        else return false;
-          
+        else return false;         
         
     }
     
-    public static boolean h_isBlack(int[] rgb){
+    public boolean h_isBlack(int[] rgb)
+    {
         
         if(rgb[0] < 100) return true;
-        else  return false;
-        
+        else  return false;   
         
     }
     
-    public static boolean h_isRed(int[] rgb){
+    public boolean h_isRed(int[] rgb)
+    {       
+        if(rgb[0] == 255 && rgb[1] == 0 && rgb[2] == 0)      
+            return true;
+
+        return false;
+    }
+
+    private boolean h_isYellow(int[] rgb)
+    {
+
+        if(rgb[0] == 255 && rgb[1] == 255 && rgb[2] == 0)      
+            return true;
         
-        if(rgb[0] >= 120 && rgb[1] <=30 && rgb[2] <=30) return true; 
-        else return false; 
-              
+        return false;
+
+    }
+
+    private boolean h_isBlue(int[] rgb)
+    {
+
+        if(rgb[0] == 0 && rgb[1] == 0 && rgb[2] == 255)      
+            return true;
+        
+        return false;
+
+    }
+
+    private boolean h_isGreen(int[] rgb)
+    {
+
+        if(rgb[0] == 0 && rgb[1] == 255 && rgb[2] == 0)      
+            return true;
+        
+        return false;
+
     }
     
-    private static void show(String message){
-        
+    public void show(String message)
+    { 
+
         show(1,message);        
     }
 
-    private static void show(int newline, String message){
+    public void show(int newline, String message)
+    {
         
         if(newline == 0){
             System.out.print(message);
         }
         else 
-            System.out.println(message);
-        
+            System.out.println(message);      
+
     }
     
-    public static ArrayList<String> h_getFiles(final File folder_files){
+    public ArrayList<String> h_getFiles(final File folder_files)
+    {
         
         ArrayList<String> list_files = new ArrayList<String>();
         
@@ -344,7 +390,7 @@ public class Break {
                 list_files.addAll(h_getFiles(tEntry));
             }
             
-            else if(tEntry.getName().indexOf("l-")==-1){  
+            else if(tEntry.getName().indexOf("I-")==-1){  
                 
                list_files.add(folder_files.toString()+"\\"+tEntry.getName()); 
                
@@ -357,3 +403,4 @@ public class Break {
     
     
 }
+

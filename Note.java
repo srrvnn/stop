@@ -60,8 +60,8 @@ public class Note {
     public void NoteFeatures(String name_relation) throws FileNotFoundException, IOException
     {
         
-        BufferedReader r = new BufferedReader(new FileReader(name_fromfile));
-        BufferedWriter w = new BufferedWriter(new FileWriter(name_tofile));
+        BufferedReader r = new BufferedReader(new FileReader("data/"+name_fromfile));
+        BufferedWriter w = new BufferedWriter(new FileWriter("data/"+name_tofile));
         
         w.write("@relation "+name_relation); w.newLine();        
 
