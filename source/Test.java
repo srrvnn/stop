@@ -31,7 +31,7 @@ public class Test {
     {
         name_trainfile = new String(s);
         name_trainer = new String(str);
-        name_model = new String(s);
+        name_model = new String(str);
     }
     
     public void SetTestFile(String s)
@@ -47,7 +47,7 @@ public class Test {
     public void BuildModel(String s) throws FileNotFoundException, IOException, Exception
     {
 
-            BufferedReader f = new BufferedReader(new FileReader("data/"+name_trainfile));
+            BufferedReader f = new BufferedReader(new FileReader("C:\\Users\\esgee\\Desktop\\project-stop\\data/"+name_trainfile));
             Instances d = new Instances(f);
             d.setClassIndex(d.numAttributes()-1);
             f.close(); 
@@ -59,7 +59,7 @@ public class Test {
 
             cl.buildClassifier(d);
             
-            ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(name_model+".model"));
+            ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("C:\\Users\\esgee\\Desktop\\project-stop\\data/"+name_model+".model"));
             
             oos.writeObject(cl);
             oos.flush();
@@ -70,43 +70,59 @@ public class Test {
     public void Run() throws FileNotFoundException, IOException, Exception
     {
 
-            BufferedReader f = new BufferedReader(new FileReader("data/"+name_trainer));
+            BufferedReader f = new BufferedReader(new FileReader("C:\\Users\\esgee\\Desktop\\project-stop\\data/"+name_trainfile));
             Instances d = new Instances(f);
             d.setClassIndex(d.numAttributes()-1);
             f.close(); 
 
-            Classifier cl = (Classifier) weka.core.SerializationHelper.read("data/"+name_model+".model");
+            Classifier cl = (Classifier) weka.core.SerializationHelper.read("C:\\Users\\esgee\\Desktop\\project-stop\\data/"+name_model+".model");
             Evaluation e = new Evaluation(d);
 
-            BufferedReader tr = new BufferedReader(new FileReader("data/"+name_testfile));
+            BufferedReader tr = new BufferedReader(new FileReader("C:\\Users\\esgee\\Desktop\\project-stop\\data/"+name_testfile));
             Instances td = new Instances(tr);
             td.setClassIndex(td.numAttributes()-1);
             tr.close();          
 
-            e.evaluateModel(cl, td);            
-            show("Evaluation Complete.");
-            show(e.toSummaryString());
+            e.evaluateModel(cl, td);  
 
-            // BufferedWriter w = new BufferedWriter(new FileWriter(name_model+"-results.txt"));
-            // f = new BufferedReader(new FileReader(name_trainer));
+            // show("Evaluation Complete.");
+            // show(e.toSummaryString());
 
-            // String line; 
-            // int counter = 0;
+            BufferedWriter w = new BufferedWriter(new FileWriter("C:\\Users\\esgee\\Desktop\\project-stop\\data/"+name_model+"-results.txt"));
+            f = new BufferedReader(new FileReader("C:\\Users\\esgee\\Desktop\\project-stop\\data/"+name_testfile));
 
-            // do{
-            //     line = cr.readLine();
-            // }while(!line.equals("@attribute"));
+            String line; 
+            int counter = 0;
 
+            do{
+                line = f.readLine();
+            }while(!line.contains("class"));
 
+            String[] classes = line.substring(line.indexOf("{")+1,line.indexOf("}")).split(",");
 
-            // while((line = f.readLine()) != null){
-            //     try{
-            //         NominalPrediction n = (NominalPrediction) e.predictions().elementAt(counter);    
-            //     }
-            //     catch(Exception e){
-            //         System.out.println(line);
-            //     }
-            // }
+            line = f.readLine();
+
+            while((line = f.readLine()) != null){
+
+                if(line.contains("%"))
+                {
+                    w.write(line); 
+                    w.newLine();
+                    continue;
+                }                    
+
+                try{
+                    NominalPrediction n = (NominalPrediction) e.predictions().elementAt(counter++);
+                    w.write(line.substring(0,line.lastIndexOf(",")+1));
+                    w.write(classes[(int)n.predicted()]);
+                    w.newLine();
+                }
+                catch(Exception ex){
+                    System.out.println(line);
+                }
+            }
+
+            w.close();
             
     }  
 

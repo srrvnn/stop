@@ -137,7 +137,7 @@ public class Break {
         
         BufferedImage img, imgl; 
         
-        BufferedWriter fout = new BufferedWriter(new FileWriter("data/"+name_file));
+        BufferedWriter fout = new BufferedWriter(new FileWriter("C:\\Users\\esgee\\Desktop\\project-stop\\data/"+name_file));
         
         long count_pixels = 0;
         
@@ -154,7 +154,9 @@ public class Break {
             img = ImageIO.read(new File(IMG)); 
             imgl = ImageIO.read(new File(IMGL)); 
             int[] rgb;
+
             
+
             for(int i=0; i< imgl.getHeight(); i++){
 
                 ArrayList row = new ArrayList();                                                     
@@ -208,7 +210,7 @@ public class Break {
         
         BufferedImage img, imgl; 
         
-        BufferedWriter fout = new BufferedWriter(new FileWriter("data/"+name_file));
+        BufferedWriter fout = new BufferedWriter(new FileWriter("C:\\Users\\esgee\\Desktop\\project-stop\\data/"+name_file));
         
         long count_pixels = 0;
         
@@ -225,7 +227,9 @@ public class Break {
             imgl = ImageIO.read(new File(IMGL)); 
             int[] rgb;
 
-            
+            fout.write("%"+t2+","+imgl.getHeight()+","+imgl.getWidth());
+            fout.newLine();
+
             for(int i=0; i< imgl.getHeight(); i++){
 
                 ArrayList row = new ArrayList();                                                     
@@ -256,8 +260,6 @@ public class Break {
                 for(j=0; j < img.getWidth(); j++){
                                       
                     rgb = h_getPixelData(img, i, j);                                                                                                                       
-
-                    if((IMGCLASS.get(i)).get(j) == -1){ continue; }
                     
                     fout.write(rgb[0]+","+rgb[1]+","+rgb[2]);
                     count_pixels++;
@@ -265,7 +267,8 @@ public class Break {
                     if((IMGCLASS.get(i)).get(j) == 0){ fout.write(",red"); fout.newLine(); }
                     else if((IMGCLASS.get(i)).get(j) == 1){ fout.write(",notred"); fout.newLine();}                   
                     else if((IMGCLASS.get(i)).get(j) == 2){ fout.write(",ambiguousred"); fout.newLine();}                   
-                    else if((IMGCLASS.get(i)).get(j) == 3){ fout.write(",ambiguousnotred"); fout.newLine();}                                                                           
+                    else if((IMGCLASS.get(i)).get(j) == 3){ fout.write(",ambiguousnotred"); fout.newLine();}   
+                    else if((IMGCLASS.get(i)).get(j) == -1){ fout.write(",notred"); fout.newLine(); }                                                                        
                 }                
             }                
         

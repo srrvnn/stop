@@ -5,6 +5,7 @@ import java.io.*;
 public class _index {
 
     public static void main(String[] args) throws IOException, FileNotFoundException, Exception {
+               
         
         //-- TRAINING MODULE TO BUILD MODELS         
         
@@ -48,7 +49,9 @@ public class _index {
         Test t = new Test(); 
         
         t.SetTrainFile("screener.arff","screener");        
+        t.SetTestFile("test.arff");        
         t.BuildModel("J48");
+        t.Run();
 
         //--------------------------------
         //-- Cluster all pixels and store them in three files.
@@ -63,45 +66,46 @@ public class _index {
         //--------------------------------
         //-- Make training files with all the points in the three clustered pixels files.
 
-        // n.SetFromFile("aclassifier.txt");
-        // n.SetToFile("aclassifier.arff");
-        // n.SetFeatures(f);
-        // n.NoteFeatures("aclassifier");
+        n.SetFromFile("aclassifier.txt");
+        n.SetToFile("aclassifier.arff");
+        n.SetFeatures(f);
+        n.NoteFeatures("aclassifier");
 
-        // n.SetFromFile("bclassifier.txt");
-        // n.SetToFile("bclassifier.arff");
-        // n.SetFeatures(f);
-        // n.NoteFeatures("bclassifier");
+        n.SetFromFile("bclassifier.txt");
+        n.SetToFile("bclassifier.arff");
+        n.SetFeatures(f);
+        n.NoteFeatures("bclassifier");
 
-        // n.SetFromFile("cclassifier.txt");
-        // n.SetToFile("cclassifier.arff");
-        // n.SetFeatures(f);
-        // n.NoteFeatures("cclassifier");        
+        n.SetFromFile("cclassifier.txt");
+        n.SetToFile("cclassifier.arff");
+        n.SetFeatures(f);
+        n.NoteFeatures("cclassifier");        
 
         //--------------------------------
         //-- Build the classifier models
 
-        // t.SetTrainFile("aclassifier.arff","aclassifier");        
-        // t.BuildModel("J48");
+        t.SetTrainFile("aclassifier.arff","aclassifier");        
+        t.BuildModel("J48");
 
-        // t.SetTrainFile("bclassifier.arff","bclassifier");        
-        // t.BuildModel("J48");
+        t.SetTrainFile("bclassifier.arff","bclassifier");        
+        t.BuildModel("J48");
 
-        // t.SetTrainFile("cclassifier.arff","cclassifier");        
-        // t.BuildModel("J48");
+        t.SetTrainFile("cclassifier.arff","cclassifier");        
+        t.BuildModel("J48");
 
         //-- TESTING MODULE TO LABEL IMAGES
 
         //--------------------------------
         //-- Make test file with all the points in the test pixels file.
+    
 
-             
+        // t.SetUseModel("screener");        
+        // t.WriteResults("screenerresult.txt");        
 
-        //t.SetUseModel("screener");
-        t.Run();
-        // t.WriteResults("screenerresult.txt");
+        Draw d = new Draw();
+        d.SetSource("screener-results.txt");
+        d.RebuildImages();
 
-        
     }
 
     private static void show(String message){
