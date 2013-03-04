@@ -1,0 +1,4 @@
+- Have a global config file to store folder information.
+- Delete all data and .class files on the start of execution.
+- Can we detect if the file is open, cannot be written to and therefore halt?
+- Accomodate new labeling policies.
