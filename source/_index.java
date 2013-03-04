@@ -42,8 +42,6 @@ public class _index {
         n.SetCondition("");     
         n.NoteFeatures("screener");   
 
-        System.exit(1);
-
         //--------------------------------
         //-- Build the screener model using the .arff file.
 
