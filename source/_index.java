@@ -98,6 +98,23 @@ public class _index {
         //--------------------------------
         //-- Make test file with all the points in the test pixels file.
     
+        String[] s2 = {"atest.txt","btest.txt","ctest.txt"};
+        c.Assign("screener-results.txt","clustercenters.txt",s2);
+
+        n.SetFromFile("atest.txt");
+        n.SetToFile("atest.arff");
+        n.SetFeatures(f);
+        n.NoteFeatures("atest");
+
+        n.SetFromFile("btest.txt");
+        n.SetToFile("btest.arff");
+        n.SetFeatures(f);
+        n.NoteFeatures("btest");
+
+        n.SetFromFile("ctest.txt");
+        n.SetToFile("ctest.arff");
+        n.SetFeatures(f);
+        n.NoteFeatures("ctest");  
 
         // t.SetUseModel("screener");        
         // t.WriteResults("screenerresult.txt");        

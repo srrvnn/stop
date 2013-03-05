@@ -147,7 +147,7 @@ public class Break {
             String t2 = image.substring(image.lastIndexOf("\\")+1,image.length());
             
             String IMG = image;
-            String IMGL = t1+"I-"+t2;
+            String IMGL = t1+t2.substring(0,t2.indexOf("."))+"l."+t2.substring(t2.indexOf(".")+1);
             
             ArrayList<ArrayList<Integer>> IMGCLASS = new ArrayList<ArrayList<Integer>>();                                
             
@@ -393,7 +393,7 @@ public class Break {
                 list_files.addAll(h_getFiles(tEntry));
             }
             
-            else if(tEntry.getName().indexOf("I-")==-1){  
+            else if(tEntry.getName().indexOf("l")==-1){  
                 
                list_files.add(folder_files.toString()+"\\"+tEntry.getName()); 
                

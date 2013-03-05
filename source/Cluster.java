@@ -15,6 +15,8 @@ public class Cluster
 	String file_source; 
 	String[] file_clusters;
 
+       int number_clusters;
+
 	Cluster()
 	{}
 
@@ -94,8 +96,92 @@ public class Cluster
        		c.close();
        	}       
 
-       	System.out.println();
+       	// System.out.println();
 	}
+
+       public void Assign(String file_points, String file_centers, String[] file_clusters) throws FileNotFoundException, IOException       
+       {
+              BufferedReader br = new BufferedReader(new FileReader("C:\\Users\\esgee\\Desktop\\project-stop\\data/"+file_points));
+              String buffer;
+
+              BufferedWriter[] cw = {new BufferedWriter(new FileWriter("C:\\Users\\esgee\\Desktop\\project-stop\\data/"+file_clusters[0])),
+                     new BufferedWriter(new FileWriter("C:\\Users\\esgee\\Desktop\\project-stop\\data/"+file_clusters[1])),
+                     new BufferedWriter(new FileWriter("C:\\Users\\esgee\\Desktop\\project-stop\\data/"+file_clusters[2]))};
+
+
+              while((buffer = br.readLine()) != null)      
+              {
+                     if(buffer.contains("ambiguous"))
+                     {
+                            int temp = h_Close(buffer,file_centers);
+                            cw[temp].write(buffer);
+                            cw[temp].newLine();
+                     }
+                     
+              }  
+
+              for(BufferedWriter c : cw)
+              {
+                     c.close();
+              }                          
+       }
+
+       private int h_Close(String point, String name_file_centers) throws FileNotFoundException, IOException
+       {
+              String[] string_points = point.split(",");
+
+              int[] points = {0,0,0};
+
+              points[0] = Integer.parseInt(string_points[0]);
+              points[1] = Integer.parseInt(string_points[1]);
+              points[2] = Integer.parseInt(string_points[2]);
+
+              int[] distance = {0,0,0};
+              
+              BufferedReader br = new BufferedReader(new FileReader("C:\\Users\\esgee\\Desktop\\project-stop\\data/"+name_file_centers));
+
+              distance[0] = h_distance(points,br.readLine());
+              distance[1] = h_distance(points,br.readLine());
+              distance[2] = h_distance(points,br.readLine());
+
+              if(distance[0] < distance[1])
+              {
+                     if(distance[0] < distance[2])
+                            return 0; 
+                     else return 2; 
+              }
+
+              else 
+              {
+                     if(distance[1] < distance[2])
+                            return 1;
+                     else return 2; 
+              }
+       }
+
+       private int h_distance(int[] point, String center)
+       {      
+              String[] string_centers = center.split(",");
+
+              float[] centers = {0,0,0};
+
+              centers[0] = Float.parseFloat(string_centers[0]);
+              centers[1] = Float.parseFloat(string_centers[1]);
+              centers[2] = Float.parseFloat(string_centers[2]);
+
+              int distance = 0;
+              int counter = 0;
+
+              for(int p : point)
+              {
+                     distance = distance + Math.abs(p-(int)centers[counter]);
+                     counter++;
+              }    
+
+              return distance;
+       }
+
+
 
 
 }
