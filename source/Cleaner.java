@@ -19,19 +19,29 @@ public class Cleaner{
 	private ArrayList<String> getFiles(final File folder)
     {        
         ArrayList<String> list_files = new ArrayList<String>();
+
+        try{
         
-        for(final File tEntry : folder.listFiles()){
-            
-            if(tEntry.isDirectory()){
-                
-                list_files.addAll(getFiles(tEntry));
-            }
-            
-            else {  
-                
-               list_files.add(folder.toString()+"\\"+tEntry.getName());                
-            }
+	        for(final File tEntry : folder.listFiles()){
+	            
+	            if(tEntry.isDirectory()){
+	                
+	                list_files.addAll(getFiles(tEntry));
+	            }
+	            
+	            else {  
+	                
+	               list_files.add(folder.toString()+"\\"+tEntry.getName());                
+	            }
+	        }
+
         }
+
+        catch (Exception e){
+
+        	System.out.println("Error, reported at 'Cleaner'.");
+        }
+
         
         return list_files;        
     }

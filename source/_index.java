@@ -5,123 +5,184 @@ import java.io.*;
 public class _index {
 
     public static void main(String[] args) throws IOException, FileNotFoundException, Exception {
-               
+
+        // //-- FIND THE PIXELS YOU WANT
+
+        // BufferedReader b53 = new BufferedReader(new FileReader("../_study/final-results.txt"));
+        // BufferedReader b55 = new BufferedReader(new FileReader("../_study/testpixels.txt"));
+
+        // String buf1, buf2; 
+        // int counter = 0, width = 0;
+
+        // while((buf1 = b53.readLine()) != null){
+
+        //     buf2 = b55.readLine();
+
+        //     if(buf2.contains("%")){
+        //         System.out.println(buf1);
+        //         counter = 0;
+        //         String[] details_image = buf1.split(",");
+        //         width = Integer.parseInt(details_image[2]); 
+        //     }
+                
+
+        //     if((buf1.contains(",red")) && (buf2.contains(",notred"))){                                
+        //         System.out.println("("+counter%width+","+counter/width+"):"+buf1);                   
+        //     }
+
+        //     counter++;
+                
+        // }
+
+        // b53.close();
+        // b55.close();        
+
+        // System.exit(1);        
+
         
+        //-- CLEAN ALL FILES THAT WERE CREATED IN THE LAST RUN
+
+        Cleaner ocleaner = new Cleaner();
+
+        ocleaner.deleteFilesFromFolder("_bin");               
+        ocleaner.deleteFilesFromFolder("_logs");
+        ocleaner.deleteFilesFromFolder("_predictions");
+
         //-- TRAINING MODULE TO BUILD MODELS         
         
         //--------------------------------  
         //-- Break all images to pixels and store a list of all pixels in files.
 
-        Break b = new Break(); 
+        Breaker obreaker = new Breaker(); 
         
-        b.GetImages("_newlabels");
-        b.WriteTrainToFile("trainpixels.txt");
-        b.WriteTestToFile("testpixels.txt");
+        obreaker.getImagesFromFolder("_labels");
+        obreaker.collectPixelsToTrain("trainpixels.txt");
+        obreaker.collectPixelsToTest("testpixels.txt");         
 
         //--------------------------------
         //-- Make training .arff file with all the pixels in the train pixels file.        
         
-        Note n = new Note();
+        Noter onoter = new Noter();
         
         String[] f = {"R","G","B"};
+        String[] features = {"R","G","B","H","S","I"};
         
-        n.SetFromFile("trainpixels.txt");
-        n.SetToFile("screener.arff");        
-        n.SetFeatures(f);        
-        n.NoteFeatures("screener");
+        onoter.SetFromFile("trainpixels.txt");
+        onoter.SetToFile("screener.arff");        
+        onoter.SetFeatures(f);        
+        onoter.noteFeatures("screener");
 
-        n.SetFromFile("trainpixels.txt");
-        n.SetToFile("ambiguous.arff");        
-        n.SetFeatures(f);   
-        n.SetCondition("OnlyAmbiguous");     
-        n.NoteFeatures("ambiguous");   
+        onoter.SetFromFile("trainpixels.txt");
+        onoter.SetToFile("ambiguous.arff");        
+        onoter.SetFeatures(f);   
+        onoter.SetCondition("OnlyAmbiguous");     
+        onoter.noteFeatures("ambiguous");   
 
-        n.SetFromFile("testpixels.txt");
-        n.SetToFile("test.arff");        
-        n.SetTest();
-        n.SetFeatures(f); 
-        n.SetCondition("");     
-        n.NoteFeatures("screener");   
+        onoter.SetFromFile("testpixels.txt");
+        onoter.SetToFile("test.arff");        
+        onoter.SetTest();
+        onoter.SetFeatures(f); 
+        onoter.SetCondition("");     
+        onoter.noteFeatures("screener");        
 
         //--------------------------------
         //-- Build the screener model using the .arff file.
 
-        Test t = new Test(); 
+        Tester otester = new Tester(); 
         
-        t.SetTrainFile("screener.arff","screener");        
-        t.SetTestFile("test.arff");        
-        t.BuildModel("J48");
-        t.Run();
+        otester.setTrainFile("screener.arff","screener");        
+        otester.setTestFile("test.arff");        
+        otester.buildModel("J48");
+        otester.runTest();
+
+        Draw d = new Draw();
+
+        // d.SetSource("screener-results.txt");
+        // d.RebuildImageswithA();
+
 
         //--------------------------------
         //-- Cluster all pixels and store them in three files.
 
-        Cluster c = new Cluster(); 
+        Clusterer oclusterer = new Clusterer(); 
 
-        c.SetSource("ambiguous.arff");
-        String[] s = {"clustercenters.txt","aclassifier.txt","bclassifier.txt","cclassifier.txt"};
-        c.SetClusters(s);        
-        c.Run();
+        String[] clusterresults = {"clustercenters.txt","aclassifier.txt","bclassifier.txt","cclassifier.txt"};
+
+        oclusterer.setSource("ambiguous.arff");        
+        oclusterer.setClusters(clusterresults);        
+        oclusterer.run();          
 
         //--------------------------------
         //-- Make training files with all the points in the three clustered pixels files.
 
-        n.SetFromFile("aclassifier.txt");
-        n.SetToFile("aclassifier.arff");
-        n.SetFeatures(f);
-        n.NoteFeatures("aclassifier");
+        
 
-        n.SetFromFile("bclassifier.txt");
-        n.SetToFile("bclassifier.arff");
-        n.SetFeatures(f);
-        n.NoteFeatures("bclassifier");
+        onoter.SetFromFile("aclassifier.txt");
+        onoter.SetToFile("aclassifier.arff");
+        onoter.SetFeatures(f);
+        onoter.noteFeatures("aclassifier");
 
-        n.SetFromFile("cclassifier.txt");
-        n.SetToFile("cclassifier.arff");
-        n.SetFeatures(f);
-        n.NoteFeatures("cclassifier");        
+        onoter.SetFromFile("bclassifier.txt");
+        onoter.SetToFile("bclassifier.arff");
+        onoter.SetFeatures(f);
+        onoter.noteFeatures("bclassifier");
 
-        //--------------------------------
-        //-- Build the classifier models
-
-        t.SetTrainFile("aclassifier.arff","aclassifier");        
-        t.BuildModel("J48");
-
-        t.SetTrainFile("bclassifier.arff","bclassifier");        
-        t.BuildModel("J48");
-
-        t.SetTrainFile("cclassifier.arff","cclassifier");        
-        t.BuildModel("J48");
+        onoter.SetFromFile("cclassifier.txt");
+        onoter.SetToFile("cclassifier.arff");
+        onoter.SetFeatures(f);
+        onoter.noteFeatures("cclassifier");                           
 
         //-- TESTING MODULE TO LABEL IMAGES
 
         //--------------------------------
-        //-- Make test file with all the points in the test pixels file.
+        //-- Make test file with all the points in the test pixels file.           
+
+        Tester t =  new Tester();   
     
         String[] s2 = {"atest.txt","btest.txt","ctest.txt"};
-        c.Assign("screener-results.txt","clustercenters.txt",s2);
 
-        n.SetFromFile("atest.txt");
-        n.SetToFile("atest.arff");
-        n.SetFeatures(f);
-        n.NoteFeatures("atest");
+        oclusterer.Assign("screener-results.txt","clustercenters.txt","pointpositions.txt",s2);
 
-        n.SetFromFile("btest.txt");
-        n.SetToFile("btest.arff");
-        n.SetFeatures(f);
-        n.NoteFeatures("btest");
+        onoter.SetFromFile("atest.txt");
+        onoter.SetToFile("atest.arff");
+        onoter.SetFeatures(f);
+        onoter.noteFeatures("atest");
 
-        n.SetFromFile("ctest.txt");
-        n.SetToFile("ctest.arff");
-        n.SetFeatures(f);
-        n.NoteFeatures("ctest");  
+        otester.setTrainFile("aclassifier.arff","aclassifier");        
+        otester.buildModel("J48"); 
+        otester.setTestFile("atest.arff");
+        otester.runTest();
 
-        // t.SetUseModel("screener");        
-        // t.WriteResults("screenerresult.txt");        
+        onoter.SetFromFile("btest.txt");
+        onoter.SetToFile("btest.arff");
+        onoter.SetFeatures(f);
+        onoter.noteFeatures("btest");
 
-        Draw d = new Draw();
-        d.SetSource("screener-results.txt");
-        d.RebuildImages();
+        otester.setTrainFile("bclassifier.arff","bclassifier");        
+        otester.buildModel("J48");
+        otester.setTestFile("btest.arff");
+        otester.runTest();
+
+        onoter.SetFromFile("ctest.txt");
+        onoter.SetToFile("ctest.arff");
+        onoter.SetFeatures(f);
+        onoter.noteFeatures("ctest");  
+
+        otester.setTrainFile("cclassifier.arff","cclassifier");        
+        otester.buildModel("J48");       
+        otester.setTestFile("ctest.arff");
+        otester.runTest();
+
+        // Draw d = new Draw();
+
+        // String[] results = {"aclassifier-results.txt","bclassifier-results.txt","cclassifier-results.txt","screener-results.txt"};
+        // d.CompileResults("final-results.txt","pointpositions.txt",results);
+
+        // d.SetSource("screener-results.txt");
+        // d.RebuildImageswithA();
+
+        // d.SetSource("final-results.txt");
+        // d.RebuildImages();
 
     }
 
