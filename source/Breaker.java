@@ -181,7 +181,7 @@ public class Breaker {
                                       
                     rgb = h_getPixelData(img, i, j); 
 
-                    if((IMGCLASS.get(i)).get(j) == -1){ continue; }                                                                                                                      
+                    // if((IMGCLASS.get(i)).get(j) == -1){ continue; }                                                                                                                      
                     
                     fout.write(rgb[0]+","+rgb[1]+","+rgb[2]);
                     count_pixels++;
@@ -190,7 +190,7 @@ public class Breaker {
                     else if((IMGCLASS.get(i)).get(j) == 1){ fout.write(",notred"); fout.newLine();}                   
                     else if((IMGCLASS.get(i)).get(j) == 2){ fout.write(",ambiguousred"); fout.newLine();}                   
                     else if((IMGCLASS.get(i)).get(j) == 3){ fout.write(",ambiguousnotred"); fout.newLine();}   
-                    //else if((IMGCLASS.get(i)).get(j) == -1){ fout.write(",notred"); fout.newLine(); }                                                                        
+                    else if((IMGCLASS.get(i)).get(j) == -1){ fout.write(",notred"); fout.newLine(); }                                                                        
                 }                
             }                
         

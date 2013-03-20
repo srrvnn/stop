@@ -6,40 +6,6 @@ public class _index {
 
     public static void main(String[] args) throws IOException, FileNotFoundException, Exception {
 
-        // //-- FIND THE PIXELS YOU WANT
-
-        // BufferedReader b53 = new BufferedReader(new FileReader("../_study/final-results.txt"));
-        // BufferedReader b55 = new BufferedReader(new FileReader("../_study/testpixels.txt"));
-
-        // String buf1, buf2; 
-        // int counter = 0, width = 0;
-
-        // while((buf1 = b53.readLine()) != null){
-
-        //     buf2 = b55.readLine();
-
-        //     if(buf2.contains("%")){
-        //         System.out.println(buf1);
-        //         counter = 0;
-        //         String[] details_image = buf1.split(",");
-        //         width = Integer.parseInt(details_image[2]); 
-        //     }
-                
-
-        //     if((buf1.contains(",red")) && (buf2.contains(",notred"))){                                
-        //         System.out.println("("+counter%width+","+counter/width+"):"+buf1);                   
-        //     }
-
-        //     counter++;
-                
-        // }
-
-        // b53.close();
-        // b55.close();        
-
-        // System.exit(1);        
-
-        
         //-- CLEAN ALL FILES THAT WERE CREATED IN THE LAST RUN
 
         Cleaner ocleaner = new Cleaner();
@@ -95,7 +61,7 @@ public class _index {
         otester.buildModel("J48");
         otester.runTest();
 
-        Draw d = new Draw();
+        // Draw d = new Draw();
 
         // d.SetSource("screener-results.txt");
         // d.RebuildImageswithA();
@@ -173,16 +139,17 @@ public class _index {
         otester.setTestFile("ctest.arff");
         otester.runTest();
 
-        // Draw d = new Draw();
+        Draw d = new Draw();
 
-        // String[] results = {"aclassifier-results.txt","bclassifier-results.txt","cclassifier-results.txt","screener-results.txt"};
-        // d.CompileResults("final-results.txt","pointpositions.txt",results);
+        String[] results = {"aclassifier-results.txt","bclassifier-results.txt","cclassifier-results.txt","screener-results.txt"};
+        d.CompileResults("final-results.txt","pointpositions.txt",results);
 
-        // d.SetSource("screener-results.txt");
-        // d.RebuildImageswithA();
+        d.SetSource("screener-results.txt");
+        d.RebuildImageswithA();
+        d.buildComparison();
 
-        // d.SetSource("final-results.txt");
-        // d.RebuildImages();
+        d.SetSource("final-results.txt");
+        d.RebuildImages();
 
     }
 
