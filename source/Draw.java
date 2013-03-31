@@ -39,10 +39,8 @@ public class Draw {
        		{
        			try{
        				line = br.readLine();
-       			if(line.contains("ambiguousred"))
-       				output.setRGB(counter%width, counter/width, 11119017);	
-       			else if(line.contains("ambiguousnotred"))
-       				output.setRGB(counter%width, counter/width, 11119017);	
+       			if(line.contains("ambiguous"))
+       				output.setRGB(counter%width, counter/width, 11119017);	       			
        			else if(line.contains("notred"))
        				output.setRGB(counter%width, counter/width, 0);	
        			else if(line.contains("red"))

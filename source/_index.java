@@ -32,25 +32,33 @@ public class _index {
         
         String[] f = {"R","G","B"};
         String[] features = {"R","G","B","H","S","I"};
+
+        String[] c = {"red","notred","ambiguous"};
+        String[] call = {"red","notred","ambiguousred","ambiguousnotred"};
         
         onoter.SetFromFile("trainpixels.txt");
         onoter.SetToFile("screener.arff");        
-        onoter.SetFeatures(f);        
-        onoter.noteFeatures("screener");
+        onoter.SetFeatures(f);      
+        onoter.setClasses(c);   
+        onoter.setModify(true);
+        onoter.noteFeatures("screener");        
 
         onoter.SetFromFile("trainpixels.txt");
         onoter.SetToFile("ambiguous.arff");        
         onoter.SetFeatures(f);   
+        onoter.setClasses(call);
+        onoter.setModify(false); 
         onoter.SetCondition("OnlyAmbiguous");     
         onoter.noteFeatures("ambiguous");   
 
         onoter.SetFromFile("testpixels.txt");
         onoter.SetToFile("test.arff");        
-        onoter.SetTest();
         onoter.SetFeatures(f); 
+        onoter.setClasses(c); 
+        onoter.setModify(true);
         onoter.SetCondition("");     
         onoter.noteFeatures("screener");        
-
+        
         //--------------------------------
         //-- Build the screener model using the .arff file.
 
@@ -59,13 +67,14 @@ public class _index {
         otester.setTrainFile("screener.arff","screener");        
         otester.setTestFile("test.arff");        
         otester.buildModel("J48");
-        otester.runTest();
+        otester.runTest();        
 
-        // Draw d = new Draw();
+        Draw d = new Draw();
 
-        // d.SetSource("screener-results.txt");
-        // d.RebuildImageswithA();
+        d.SetSource("screener-results.txt");
+        d.RebuildImageswithA();
 
+        System.exit(1);
 
         //--------------------------------
         //-- Cluster all pixels and store them in three files.
@@ -139,7 +148,7 @@ public class _index {
         otester.setTestFile("ctest.arff");
         otester.runTest();
 
-        Draw d = new Draw();
+        // Draw d = new Draw();
 
         String[] results = {"aclassifier-results.txt","bclassifier-results.txt","cclassifier-results.txt","screener-results.txt"};
         d.CompileResults("final-results.txt","pointpositions.txt",results);

@@ -8,6 +8,7 @@ public class Noter {
     
     String code_condition; 
     String[] list_features;
+    String[] list_classes;
 
     boolean test;
     
@@ -19,7 +20,10 @@ public class Noter {
         name_tofile = "";
         code_condition = "";          
         list_features = null;
-        test = false;        
+        list_classes = null;
+        test = false;    
+
+
         
         attributetypes = new HashMap();
 
@@ -52,10 +56,15 @@ public class Noter {
         list_features = s; 
     }
 
-    public void SetTest()
+    public void setModify(boolean b)
     {
-        test = true;
-    }   
+        test = b;
+    } 
+
+    public void setClasses(String[] s){
+
+        list_classes = s;
+    }  
     
     
     public void noteFeatures(String name_relation) throws FileNotFoundException, IOException
@@ -73,7 +82,23 @@ public class Noter {
               w.write("@attribute "+feature+" "+attributetypes.get(feature)); w.newLine();
         }
 
-        w.write("@attribute class {red,notred,ambiguousred,ambiguousnotred}"); w.newLine();        
+        w.write("@attribute class {");
+
+        boolean firstpassed = false;
+
+        for(String s : list_classes){
+
+            if(!firstpassed){
+
+                firstpassed = true;                 
+            }
+            else
+                w.write(",");    
+
+            w.write(s);      
+        }
+
+        w.write("}"); w.newLine();        
         w.write("@data"); 
         
         String line = null; 
@@ -100,8 +125,15 @@ public class Noter {
                     sb.append(h_getfeature(items,feature));
                 }
 
-                if(test)                    
-                    sb.append(","+items[items.length-1]);
+                if(test){
+
+                    if(items[items.length-1].contains("ambiguous"))
+                        sb.append(","+"ambiguous");
+
+                    else 
+                        sb.append(","+items[items.length-1]);
+                }                    
+                    
                 else 
                     sb.append(","+items[items.length-1]);
 
