@@ -32,10 +32,13 @@ public class Clusterer
 	public void setClusters(String[] s)
 	{
 		file_clusters = s; 
+              number_clusters = file_clusters.length - 1;
 	}
 
 	public void run() throws FileNotFoundException, IOException, Exception
 	{
+
+              int counter;
 
 		BufferedReader cr = new BufferedReader(new FileReader("../_logs/"+file_source));
        	Instances cd = new Instances(cr);
@@ -53,46 +56,57 @@ public class Clusterer
        	SimpleKMeans kmeans = new SimpleKMeans(); 
 
        	kmeans.setPreserveInstancesOrder(true);
-       	kmeans.setNumClusters(3);
+       	kmeans.setNumClusters(number_clusters);
        	kmeans.setMaxIterations(1500);
        	kmeans.buildClusterer(nd);
 
-       	String cc1 = kmeans.getClusterCentroids().instance(0).toString();  
-       	String cc2 = kmeans.getClusterCentroids().instance(1).toString();  
-       	String cc3 = kmeans.getClusterCentroids().instance(2).toString();
+       	// String cc1 = kmeans.getClusterCentroids().instance(0).toString();  
+       	// String cc2 = kmeans.getClusterCentroids().instance(1).toString();  
+       	// String cc3 = kmeans.getClusterCentroids().instance(2).toString();
 
        	BufferedWriter cw0 = new BufferedWriter(new FileWriter("../_logs/"+file_clusters[0]));
 
-       	cw0.write(cc1); cw0.newLine();
-       	cw0.write(cc2); cw0.newLine();
-       	cw0.write(cc3); cw0.newLine();
-
+              for(counter = 0; counter < number_clusters ; counter++)
+              {
+                     cw0.write(kmeans.getClusterCentroids().instance(counter).toString());
+                     cw0.newLine();
+              }
+       	
        	cw0.close();
 
        	int[] assignments = kmeans.getAssignments();       	
-       	String line;
-       	int counter = 0; 
+       	String line;       	
 
        	cr.close();
        	cr = new BufferedReader(new FileReader("../_logs/"+file_source));
 
-       	BufferedWriter[] cw = {new BufferedWriter(new FileWriter("../_logs/"+file_clusters[1])),
-                     new BufferedWriter(new FileWriter("../_logs/"+file_clusters[2])),
-                     new BufferedWriter(new FileWriter("../_logs/"+file_clusters[3]))};
+       	// BufferedWriter[] cw = {new BufferedWriter(new FileWriter("../_logs/"+file_clusters[1])),
+        //              new BufferedWriter(new FileWriter("../_logs/"+file_clusters[2])),
+        //              new BufferedWriter(new FileWriter("../_logs/"+file_clusters[3]))};
+
+              BufferedWriter[] cw = new BufferedWriter[number_clusters];
+
+              for(counter = 0; counter < number_clusters; counter++){
+
+                     cw[counter] = new BufferedWriter((new FileWriter("../_logs/"+file_clusters[counter+1])));
+              }
        							
 
        	do{
        		line = cr.readLine();
        	}while(!line.equals("@data"));
 
+              counter = 0;
+
        	while((line = cr.readLine()) != null)  
        	{	
                      if(line.contains("%"))      	  			     	
                             continue;
-                     
-       		cw[assignments[counter]].write(line);	       		       		       	   			       		
+
+                     cw[assignments[counter]].write(line);                                                                                                       
                      cw[assignments[counter]].newLine();
-   			counter++;		       		
+                     counter++;                                                                         
+       		
        	}
 
        	for(BufferedWriter c : cw)
@@ -137,8 +151,8 @@ public class Clusterer
                      }
               }  
 
-              System.out.println("Ambiguous Pixels: "+cn[0]+","+cn[1]+","+cn[2]);
-              System.out.println("Other Pixels: "+c3);
+              // System.out.println("Ambiguous Pixels: "+cn[0]+","+cn[1]+","+cn[2]);
+              // System.out.println("Other Pixels: "+c3);
 
               for(BufferedWriter c : cw)
               {

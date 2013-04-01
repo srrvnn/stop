@@ -53,7 +53,7 @@ public class _index {
 
         onoter.SetFromFile("testpixels.txt");
         onoter.SetToFile("test.arff");        
-        onoter.SetFeatures(f); 
+        onoter.SetFeatures(f);  
         onoter.setClasses(c); 
         onoter.setModify(true);
         onoter.SetCondition("");     
@@ -74,7 +74,7 @@ public class _index {
         d.SetSource("screener-results.txt");
         d.RebuildImageswithA();
 
-        System.exit(1);
+        // System.exit(1);
 
         //--------------------------------
         //-- Cluster all pixels and store them in three files.
@@ -83,7 +83,7 @@ public class _index {
 
         String[] clusterresults = {"clustercenters.txt","aclassifier.txt","bclassifier.txt","cclassifier.txt"};
 
-        oclusterer.setSource("ambiguous.arff");        
+        oclusterer.setSource("ambiguous.arff");               
         oclusterer.setClusters(clusterresults);        
         oclusterer.run();          
 
