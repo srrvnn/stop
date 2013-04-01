@@ -164,6 +164,14 @@ public class Noter {
                 return false;          
         }
 
+        if(code_condition.equals("RemoveNotRed"))
+        {
+            if(s.contains(",notred"))
+                return false; 
+            else 
+                return true;
+        }
+
         return true;
     }
 
