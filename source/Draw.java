@@ -21,7 +21,6 @@ public class Draw {
 	void RebuildImageswithA() throws FileNotFoundException, IOException {
 
 
-
 		BufferedReader br = new BufferedReader(new FileReader("../_logs/"+name_source));
 		String line;	
 
@@ -54,41 +53,41 @@ public class Draw {
        	}
 	}
 
-      void RebuildImages() throws FileNotFoundException, IOException {
+  void RebuildImages() throws FileNotFoundException, IOException {
 
-            BufferedReader br = new BufferedReader(new FileReader("../_logs/"+name_source));
-            String line;      
+        BufferedReader br = new BufferedReader(new FileReader("../_logs/"+name_source));
+        String line;      
 
-            while(true)
-            {                 
-                  if((line = br.readLine()) == null) break;
+        while(true)
+        {                 
+              if((line = br.readLine()) == null) break;
 
-                  String[] details_image = line.split(",");
-                  BufferedImage output = new BufferedImage(Integer.parseInt(details_image[2]),Integer.parseInt(details_image[1]),BufferedImage.TYPE_INT_RGB);
+              String[] details_image = line.split(",");
+              BufferedImage output = new BufferedImage(Integer.parseInt(details_image[2]),Integer.parseInt(details_image[1]),BufferedImage.TYPE_INT_RGB);
 
-                  int height = Integer.parseInt(details_image[1]);
-                  int width = Integer.parseInt(details_image[2]);                     
-                  
-                  for(int counter = 0; counter < height * width; counter++)
-                  {
-                        try{
-                              line = br.readLine();
-                        if(line.contains("ambiguousred"))
-                              output.setRGB(counter%width, counter/width, 16711680);      
-                        else if(line.contains("ambiguousnotred"))
-                              output.setRGB(counter%width, counter/width, 0);      
-                        else if(line.contains("notred"))
-                              output.setRGB(counter%width, counter/width, 0); 
-                        else if(line.contains("red"))
-                              output.setRGB(counter%width, counter/width, 16711680);            
-                        }   
-                        catch(Exception e)                  
-                        {}
-                  }
+              int height = Integer.parseInt(details_image[1]);
+              int width = Integer.parseInt(details_image[2]);                     
+              
+              for(int counter = 0; counter < height * width; counter++)
+              {
+                    try{
+                          line = br.readLine();
+                    if(line.contains("ambiguousred"))
+                          output.setRGB(counter%width, counter/width, 16711680);      
+                    else if(line.contains("ambiguousnotred"))
+                          output.setRGB(counter%width, counter/width, 0);      
+                    else if(line.contains("notred"))
+                          output.setRGB(counter%width, counter/width, 0); 
+                    else if(line.contains("red"))
+                          output.setRGB(counter%width, counter/width, 16711680);            
+                    }   
+                    catch(Exception e)                  
+                    {}
+              }
 
-                  ImageIO.write(output, "png", new File("../_predictions/"+"2O-"+details_image[0].substring(1)));
-            }            
-      }
+              ImageIO.write(output, "png", new File("../_predictions/"+"2O-"+details_image[0].substring(1)));
+        }            
+  }
 
 
       public void CompileResults(String fresults, String ppoints, String[] allresults) throws FileNotFoundException, IOException {
