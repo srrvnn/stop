@@ -14,31 +14,35 @@ public class Clusterer
 {
 
 	String file_source; 
-	String[] file_clusters;
-       // ArrayList[] points_clusters; 
+	String[] file_trainclusters;     
+    String[] file_testclusters;
+    String code_condition; 
+    // ArrayList[] points_clusters; 
 
-       int number_clusters;
+    int number_clusters;
 
 	Clusterer()
 	{
-              // points_clusters = new ArrayList[3];
-       }
+        code_condition = "";
+        // points_clusters = new ArrayList[3];
+    }
 
 	public void setSource(String s)
 	{
 		file_source = s; 
 	}
 
-	public void setClusters(String[] s)
+	public void setResults(String[] s, String[] t, int n)
 	{
-		file_clusters = s; 
-              number_clusters = file_clusters.length - 1;
+		file_trainclusters = s; 
+        file_testclusters = t;
+        number_clusters = n;
 	}
 
 	public void run() throws FileNotFoundException, IOException, Exception
 	{
 
-              int counter;
+        int counter;
 
 		BufferedReader cr = new BufferedReader(new FileReader("../_logs/"+file_source));
        	Instances cd = new Instances(cr);
@@ -60,17 +64,13 @@ public class Clusterer
        	kmeans.setMaxIterations(1500);
        	kmeans.buildClusterer(nd);
 
-       	// String cc1 = kmeans.getClusterCentroids().instance(0).toString();  
-       	// String cc2 = kmeans.getClusterCentroids().instance(1).toString();  
-       	// String cc3 = kmeans.getClusterCentroids().instance(2).toString();
+       	BufferedWriter cw0 = new BufferedWriter(new FileWriter("../_logs/"+file_trainclusters[0]));
 
-       	BufferedWriter cw0 = new BufferedWriter(new FileWriter("../_logs/"+file_clusters[0]));
-
-              for(counter = 0; counter < number_clusters ; counter++)
-              {
-                     cw0.write(kmeans.getClusterCentroids().instance(counter).toString());
-                     cw0.newLine();
-              }
+        for(counter = 0; counter < number_clusters ; counter++)
+        {
+             cw0.write(kmeans.getClusterCentroids().instance(counter).toString());
+             cw0.newLine();
+        }
        	
        	cw0.close();
 
@@ -80,19 +80,16 @@ public class Clusterer
        	cr.close();
        	cr = new BufferedReader(new FileReader("../_logs/"+file_source));
 
-       	// BufferedWriter[] cw = {new BufferedWriter(new FileWriter("../_logs/"+file_clusters[1])),
-        //              new BufferedWriter(new FileWriter("../_logs/"+file_clusters[2])),
-        //              new BufferedWriter(new FileWriter("../_logs/"+file_clusters[3]))};
-
               BufferedWriter[] cw = new BufferedWriter[number_clusters];
 
               for(counter = 0; counter < number_clusters; counter++){
 
-                     cw[counter] = new BufferedWriter((new FileWriter("../_logs/"+file_clusters[counter+1])));
+                     String number = Integer.toString(counter);
+                     cw[counter] = new BufferedWriter((new FileWriter("../_logs/"+file_trainclusters[1]+number+file_trainclusters[2])));
               }
        							
 
-       	do{
+       	    do{
        		line = cr.readLine();
        	}while(!line.equals("@data"));
 
@@ -114,86 +111,89 @@ public class Clusterer
        		c.close();
        	}       
 
-       	// System.out.println();
 	}
 
-       public void Assign(String file_points, String file_centers, String point_positions, String[] file_clusters) throws FileNotFoundException, IOException       
-       {
-              BufferedReader br = new BufferedReader(new FileReader("../_logs/"+file_points));
-              BufferedWriter ppw = new BufferedWriter(new FileWriter("../_logs/"+point_positions));
+    public void assign(String file_points, String file_centers, String file_assignments) throws FileNotFoundException, IOException  {
 
-              String buffer;
+        BufferedReader br = new BufferedReader(new FileReader("../_logs/"+file_points));
+        BufferedWriter bw = new BufferedWriter(new FileWriter("../_logs/"+file_assignments));
 
-              BufferedWriter[] cw = {new BufferedWriter(new FileWriter("../_logs/"+file_clusters[0])),
-                     new BufferedWriter(new FileWriter("../_logs/"+file_clusters[1])),
-                     new BufferedWriter(new FileWriter("../_logs/"+file_clusters[2]))};
+        String buffer;
 
-              int[] cn = {0,0,0};
-              int c3 = 0;
+        BufferedWriter[] cw = new BufferedWriter[number_clusters];
 
-              while((buffer = br.readLine()) != null)      
-              {                    
+        for(int counter = 0; counter < number_clusters; counter++){
 
-                     if(buffer.contains("ambiguous"))
-                     {
-                            int temp = h_Close(buffer,file_centers);
-                            ppw.write(Integer.toString(temp)); ppw.newLine();
+             String number = Integer.toString(counter);
+             cw[counter] = new BufferedWriter((new FileWriter("../_logs/"+file_testclusters[0]+number+file_testclusters[1])));
+        }
 
-                            cw[temp].write(buffer);
-                            cw[temp].newLine();
+        int[] countMembers = new int[number_clusters];
 
-                            cn[temp]++;
-                     }      
-                     else if(buffer.indexOf("%") == -1)
-                     {
-                            ppw.write("3"); ppw.newLine();               
-                            c3++;
-                     }
-              }  
+        for(int countMember : countMembers)
+            countMember = 0;
 
-              // System.out.println("Ambiguous Pixels: "+cn[0]+","+cn[1]+","+cn[2]);
-              // System.out.println("Other Pixels: "+c3);
+        int countOutliers = 0;
 
-              for(BufferedWriter c : cw)
-              {
-                     c.close();
-              }           
+        while((buffer = br.readLine()) != null)      
+        { 
 
-              ppw.close();          
-       }
+             if(buffer.contains("%")){
+                bw.write(buffer); bw.newLine();
+             }                   
+                
 
-       private int h_Close(String point, String name_file_centers) throws FileNotFoundException, IOException
-       {
-              String[] string_points = point.split(",");
+            else {
 
-              int[] points = {0,0,0};
+             if(h_qualify(buffer))
+             {
+                    int temp = h_Close(buffer,file_centers);
+                    bw.write(buffer+","); bw.write(Integer.toString(temp)); bw.newLine();
 
-              points[0] = Integer.parseInt(string_points[0]);
-              points[1] = Integer.parseInt(string_points[1]);
-              points[2] = Integer.parseInt(string_points[2]);
+                    cw[temp].write(buffer);
+                    cw[temp].newLine();
 
-              int[] distance = {0,0,0};
-              
-              BufferedReader br = new BufferedReader(new FileReader("../_logs/"+name_file_centers));
+                    countMembers[temp]++;
+             } 
 
-              distance[0] = h_distance(points,br.readLine());
-              distance[1] = h_distance(points,br.readLine());
-              distance[2] = h_distance(points,br.readLine());
+             else if(buffer.indexOf("%") == -1)
+             {
+                    bw.write(number_clusters); bw.newLine();               
+                    countOutliers++;
+             }
+            }
+        }  
 
-              if(distance[0] < distance[1])
-              {
-                     if(distance[0] < distance[2])
-                            return 0; 
-                     else return 2; 
-              }
+        // System.out.println("Ambiguous Pixels: "+countMembers[0]+","+countMembers[1]+","+countMembers[2]);
+        // System.out.println("Other Pixels: "+countOutliers);
 
-              else 
-              {
-                     if(distance[1] < distance[2])
-                            return 1;
-                     else return 2; 
-              }
-       }
+        for(BufferedWriter c : cw)
+        {
+             c.close();
+        }           
+
+        bw.close();          
+    }
+
+    private int h_Close(String point, String file_centers) throws FileNotFoundException, IOException {
+
+        String[] string_points = point.split(",");
+
+        int[] points = {0,0,0};
+
+        points[0] = Integer.parseInt(string_points[0]);
+        points[1] = Integer.parseInt(string_points[1]);
+        points[2] = Integer.parseInt(string_points[2]);
+
+        int[] distance = new int[number_clusters];
+
+        BufferedReader br = new BufferedReader(new FileReader("../_logs/"+file_centers));
+
+        for(int i = 0; i < number_clusters; i++)
+             distance[i] = h_distance(points, br.readLine());
+
+        return h_smallest(distance);
+    }
 
        private int h_distance(int[] point, String center)
        {      
@@ -217,7 +217,47 @@ public class Clusterer
               return distance;
        }
 
+       private int h_smallest(int[] distances){
 
+              int minvalue = Integer.MAX_VALUE; 
+              int minindex = 0, counter = 0;
 
+              for( int d : distances){
+                     if( d < minvalue){
+
+                            minindex = counter;
+                            minvalue = d;
+                     }
+                            
+                     counter++;
+              }
+
+              return minindex;
+       }
+
+       public boolean h_qualify(String s)
+       {
+            if(s.contains("%")) return false; 
+
+            if(code_condition.equals("")) return true;
+
+            if(code_condition.equals("OnlyAmbiguous"))
+            {
+                if(s.contains("ambiguous"))
+                   return true;
+                else     
+                   return false;          
+            }
+
+            if(code_condition.equals("NoNotRed"))
+            {
+                if(s.contains(",notred"))
+                    return false; 
+                else 
+                    return true;
+            }
+
+            return true;    
+        }
 
 }

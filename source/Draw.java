@@ -24,283 +24,283 @@ public class Draw {
 		BufferedReader br = new BufferedReader(new FileReader("../_logs/"+name_source));
 		String line;	
 
-       	while(true)
-       	{       		
-       		if((line = br.readLine()) == null) break;
-
-       		String[] details_image = line.split(",");
-       		BufferedImage output = new BufferedImage(Integer.parseInt(details_image[2]),Integer.parseInt(details_image[1]),BufferedImage.TYPE_INT_RGB);
-
-       		int height = Integer.parseInt(details_image[1]);
-       		int width = Integer.parseInt(details_image[2]);       		  
-       		
-       		for(int counter = 0; counter < height * width; counter++)
-       		{
-       			try{
-       				line = br.readLine();
-       			if(line.contains("ambiguous"))
-       				output.setRGB(counter%width, counter/width, 11119017);	       			
-       			else if(line.contains("notred"))
-       				output.setRGB(counter%width, counter/width, 0);	
-       			else if(line.contains("red"))
-       				output.setRGB(counter%width, counter/width, 16711680);		
-       			}   
-       			catch(Exception e)    			
-       			{}
-       		}
-
-       		ImageIO.write(output, "png", new File("../_predictions/"+"1O-"+details_image[0].substring(1)));
-       	}
-	}
-
-  void RebuildImages() throws FileNotFoundException, IOException {
-
-        BufferedReader br = new BufferedReader(new FileReader("../_logs/"+name_source));
-        String line;      
-
         while(true)
-        {                 
-              if((line = br.readLine()) == null) break;
+        {       		
+           if((line = br.readLine()) == null) break;
 
-              String[] details_image = line.split(",");
-              BufferedImage output = new BufferedImage(Integer.parseInt(details_image[2]),Integer.parseInt(details_image[1]),BufferedImage.TYPE_INT_RGB);
+           String[] details_image = line.split(",");
+           BufferedImage output = new BufferedImage(Integer.parseInt(details_image[2]),Integer.parseInt(details_image[1]),BufferedImage.TYPE_INT_RGB);
 
-              int height = Integer.parseInt(details_image[1]);
-              int width = Integer.parseInt(details_image[2]);                     
-              
-              for(int counter = 0; counter < height * width; counter++)
-              {
-                    try{
-                          line = br.readLine();
-                    if(line.contains("ambiguousred"))
-                          output.setRGB(counter%width, counter/width, 16711680);      
-                    else if(line.contains("ambiguousnotred"))
-                          output.setRGB(counter%width, counter/width, 0);      
-                    else if(line.contains("notred"))
-                          output.setRGB(counter%width, counter/width, 0); 
-                    else if(line.contains("red"))
-                          output.setRGB(counter%width, counter/width, 16711680);            
-                    }   
-                    catch(Exception e)                  
-                    {}
-              }
+           int height = Integer.parseInt(details_image[1]);
+           int width = Integer.parseInt(details_image[2]);       		  
 
-              ImageIO.write(output, "png", new File("../_predictions/"+"2O-"+details_image[0].substring(1)));
-        }            
+           for(int counter = 0; counter < height * width; counter++)
+           {
+              try{
+                 line = br.readLine();
+                 if(line.contains("ambiguous"))
+                     output.setRGB(counter%width, counter/width, 11119017);	       			
+                 else if(line.contains("notred"))
+                     output.setRGB(counter%width, counter/width, 0);	
+                 else if(line.contains("red"))
+                     output.setRGB(counter%width, counter/width, 16711680);		
+             }   
+             catch(Exception e)    			
+             {}
+            }
+
+         ImageIO.write(output, "png", new File("../_predictions/"+"1O-"+details_image[0].substring(1)));
+     }
+    }
+
+ void RebuildImages() throws FileNotFoundException, IOException {
+
+    BufferedReader br = new BufferedReader(new FileReader("../_logs/"+name_source));
+    String line;      
+
+    while(true)
+    {                 
+      if((line = br.readLine()) == null) break;
+
+      String[] details_image = line.split(",");
+      BufferedImage output = new BufferedImage(Integer.parseInt(details_image[2]),Integer.parseInt(details_image[1]),BufferedImage.TYPE_INT_RGB);
+
+      int height = Integer.parseInt(details_image[1]);
+      int width = Integer.parseInt(details_image[2]);                     
+
+      for(int counter = 0; counter < height * width; counter++)
+      {
+        try{
+          line = br.readLine();
+          if(line.contains("ambiguousred"))
+              output.setRGB(counter%width, counter/width, 16711680);      
+          else if(line.contains("ambiguousnotred"))
+              output.setRGB(counter%width, counter/width, 0);      
+          else if(line.contains("notred"))
+              output.setRGB(counter%width, counter/width, 0); 
+          else if(line.contains("red"))
+              output.setRGB(counter%width, counter/width, 16711680);            
+      }   
+      catch(Exception e)                  
+      {}
   }
 
+  ImageIO.write(output, "png", new File("../_predictions/"+"2O-"+details_image[0].substring(1)));
+}            
+}
 
-      public void CompileResults(String fresults, String ppoints, String[] allresults) throws FileNotFoundException, IOException {
 
-            BufferedReader reader1 = new BufferedReader(new FileReader("../_logs/"+ppoints));
-            BufferedReader[] readern = { new BufferedReader(new FileReader("../_logs/"+allresults[0])), 
-                                         new BufferedReader(new FileReader("../_logs/"+allresults[1])), 
-                                         new BufferedReader(new FileReader("../_logs/"+allresults[2])), 
-                                         new BufferedReader(new FileReader("../_logs/"+allresults[3])), };
+public void CompileResults(String fresults, String ppoints, String[] allresults) throws FileNotFoundException, IOException {
 
-            BufferedWriter writer1 = new BufferedWriter(new FileWriter("../_logs/"+fresults));
-            String buffer1; 
+    BufferedReader reader1 = new BufferedReader(new FileReader("../_logs/"+ppoints));
+    BufferedReader[] readern = { new BufferedReader(new FileReader("../_logs/"+allresults[0])), 
+    new BufferedReader(new FileReader("../_logs/"+allresults[1])), 
+    new BufferedReader(new FileReader("../_logs/"+allresults[2])), 
+    new BufferedReader(new FileReader("../_logs/"+allresults[3])), };
 
-            writer1.write(readern[3].readLine());
+    BufferedWriter writer1 = new BufferedWriter(new FileWriter("../_logs/"+fresults));
+    String buffer1; 
+
+    writer1.write(readern[3].readLine());
+    writer1.newLine();
+
+    while((buffer1 = reader1.readLine()) != null)
+    {
+      try{                       
+        String towrite = new String(readern[Integer.parseInt(buffer1)].readLine());
+
+        writer1.write(towrite);
+        writer1.newLine();                     
+
+        if(towrite.indexOf("%") != -1)
+        {
+          writer1.write(readern[Integer.parseInt(buffer1)].readLine());
+          writer1.newLine();
+      }
+
+      if(!buffer1.equals("3"))
+      {
+          String toescape = new String(readern[3].readLine());
+          if(toescape.indexOf("%") != -1)
+          {
+            writer1.write(toescape);
             writer1.newLine();
+        }
+    }
 
-            while((buffer1 = reader1.readLine()) != null)
-            {
-                  try{                       
-                        String towrite = new String(readern[Integer.parseInt(buffer1)].readLine());
+}
 
-                        writer1.write(towrite);
-                        writer1.newLine();                     
+catch(Exception e)                  
+{
+    System.out.println(buffer1);
+}
+}
 
-                        if(towrite.indexOf("%") != -1)
-                        {
-                              writer1.write(readern[Integer.parseInt(buffer1)].readLine());
-                              writer1.newLine();
-                        }
+writer1.close();
+}    
 
-                        if(!buffer1.equals("3"))
-                        {
-                              String toescape = new String(readern[3].readLine());
-                              if(toescape.indexOf("%") != -1)
-                              {
-                                    writer1.write(toescape);
-                                    writer1.newLine();
-                              }
-                        }
-                              
-                  }
+public void buildComparison() throws IOException {
 
-                  catch(Exception e)                  
-                  {
-                        System.out.println(buffer1);
-                  }
-            }
+    BufferedReader br = new BufferedReader(new FileReader("../_logs/"+name_source));
+    String line;      
 
-            writer1.close();
-      }    
+    while(true)
+    {                 
+      if((line = br.readLine()) == null) break;
 
-      public void buildComparison() throws IOException {
+      String[] details_image = line.split(",");
 
-            BufferedReader br = new BufferedReader(new FileReader("../_logs/"+name_source));
-            String line;      
+      String imgs = details_image[0].substring(1);
+      String imgl = imgs.substring(0,imgs.indexOf("."))+"l."+imgs.substring(imgs.indexOf(".")+1);
 
-            while(true)
-            {                 
-                  if((line = br.readLine()) == null) break;
+      BufferedImage img = ImageIO.read(new File("../_labels/"+imgl));                   
 
-                  String[] details_image = line.split(",");
+      BufferedImage predictions = new BufferedImage(Integer.parseInt(details_image[2]),Integer.parseInt(details_image[1]),BufferedImage.TYPE_INT_RGB);
+      BufferedImage errors = new BufferedImage(Integer.parseInt(details_image[2]),Integer.parseInt(details_image[1]),BufferedImage.TYPE_INT_RGB);
 
-                  String imgs = details_image[0].substring(1);
-                  String imgl = imgs.substring(0,imgs.indexOf("."))+"l."+imgs.substring(imgs.indexOf(".")+1);
+      int height = Integer.parseInt(details_image[1]);
+      int width = Integer.parseInt(details_image[2]);                     
 
-                  BufferedImage img = ImageIO.read(new File("../_labels/"+imgl));                   
-
-                  BufferedImage predictions = new BufferedImage(Integer.parseInt(details_image[2]),Integer.parseInt(details_image[1]),BufferedImage.TYPE_INT_RGB);
-                  BufferedImage errors = new BufferedImage(Integer.parseInt(details_image[2]),Integer.parseInt(details_image[1]),BufferedImage.TYPE_INT_RGB);
-
-                  int height = Integer.parseInt(details_image[1]);
-                  int width = Integer.parseInt(details_image[2]);                     
-                  
-                  for(int counter = 0; counter < height * width; counter++)
-                  {
-                        try{
-
-                              line = br.readLine();
-
-                              if(h_isWhite(h_getPixelData(img,counter/width,counter%width))) {
-
-                                    predictions.setRGB(counter%width, counter/width, 16777215);      
-                                    errors.setRGB(counter%width, counter/width, 16777215);
-                              }
-
-                              else {
-
-                                    if(line.contains("ambiguousred")){
-
-                                          predictions.setRGB(counter%width, counter/width, 11119017);      
-
-                                          if(!h_isBlue(h_getPixelData(img,counter/width,counter%width))) 
-                                              errors.setRGB(counter%width, counter/width, 15597806);  
-
-                                          else errors.setRGB(counter%width, counter/width, 16777215);  
-                                    }
-                                    
-
-                                    else if(line.contains("ambiguousnotred")){
-
-                                          predictions.setRGB(counter%width, counter/width, 11119017); 
-
-                                          if(!h_isGreen(h_getPixelData(img,counter/width,counter%width))) 
-                                              errors.setRGB(counter%width, counter/width, 15597806);
-
-                                          else errors.setRGB(counter%width, counter/width, 16777215); 
-                                    }
-                                          
-
-                                    else if(line.contains("notred")){
-
-                                          predictions.setRGB(counter%width, counter/width, 0); 
-
-                                          if(!h_isYellow(h_getPixelData(img,counter/width,counter%width))) 
-                                              errors.setRGB(counter%width, counter/width, 15597806); 
-
-                                          else errors.setRGB(counter%width, counter/width, 16777215);
-                                    }
-                                          
-
-                                    else if(line.contains("red")){
-
-                                          predictions.setRGB(counter%width, counter/width, 16711680);            
-
-                                          if(!h_isRed(h_getPixelData(img,counter/width,counter%width))) 
-                                              errors.setRGB(counter%width, counter/width, 15597806); 
-
-                                          else errors.setRGB(counter%width, counter/width, 16777215);
-                                    }                                          
-                              }
-                        
-                        }   
-                        catch(Exception e) {}
-                  }
-
-                  ImageIO.write(predictions, "png", new File("../_predictions/"+"3O-"+details_image[0].substring(1)));
-                  ImageIO.write(errors, "png", new File("../_predictions/"+"4O-"+details_image[0].substring(1)));
-            }     
-            
-            
-      }     
-
-      private int[] h_getPixelData(BufferedImage img, int x, int y) 
+      for(int counter = 0; counter < height * width; counter++)
       {
+        try{
 
-            int h = img.getHeight(); 
-            int w = img.getWidth(); 
+          line = br.readLine();
 
-            int rgb[];
+          if(h_isWhite(h_getPixelData(img,counter/width,counter%width))) {
 
-            if(x<0 || x==h || y<0 || y==w){
+            predictions.setRGB(counter%width, counter/width, 16777215);      
+            errors.setRGB(counter%width, counter/width, 16777215);
+        }
 
-                rgb = new int[] {0,0,0};
+        else {
 
-            }
+            if(line.contains("ambiguousred")){
 
-            else {
+              predictions.setRGB(counter%width, counter/width, 11119017);      
 
-                  int argb = img.getRGB(y,x);
+              if(!h_isBlue(h_getPixelData(img,counter/width,counter%width))) 
+                  errors.setRGB(counter%width, counter/width, 15597806);  
 
-                  rgb = new int[] {
-                      (argb >> 16) & 0xff, 
-                      (argb >>  8) & 0xff, 
-                      (argb      ) & 0xff
-                  };
+              else errors.setRGB(counter%width, counter/width, 16777215);  
+          }
 
-            }
 
-            return rgb;
+          else if(line.contains("ambiguousnotred")){
+
+              predictions.setRGB(counter%width, counter/width, 11119017); 
+
+              if(!h_isGreen(h_getPixelData(img,counter/width,counter%width))) 
+                  errors.setRGB(counter%width, counter/width, 15597806);
+
+              else errors.setRGB(counter%width, counter/width, 16777215); 
+          }
+
+
+          else if(line.contains("notred")){
+
+              predictions.setRGB(counter%width, counter/width, 0); 
+
+              if(!h_isYellow(h_getPixelData(img,counter/width,counter%width))) 
+                  errors.setRGB(counter%width, counter/width, 15597806); 
+
+              else errors.setRGB(counter%width, counter/width, 16777215);
+          }
+
+
+          else if(line.contains("red")){
+
+              predictions.setRGB(counter%width, counter/width, 16711680);            
+
+              if(!h_isRed(h_getPixelData(img,counter/width,counter%width))) 
+                  errors.setRGB(counter%width, counter/width, 15597806); 
+
+              else errors.setRGB(counter%width, counter/width, 16777215);
+          }                                          
       }
 
-      public boolean h_isWhite(int[] rgb)
-      {
+  }   
+  catch(Exception e) {}
+}
 
-            if((rgb[0] > 250) && (rgb[1] > 250) && (rgb[2] > 250)) return true;
-            else return false;         
-      }
+ImageIO.write(predictions, "png", new File("../_predictions/"+"3O-"+details_image[0].substring(1)));
+ImageIO.write(errors, "png", new File("../_predictions/"+"4O-"+details_image[0].substring(1)));
+}     
 
-      public boolean h_isRed(int[] rgb)
-      {       
-            if(rgb[0] == 255 && rgb[1] == 0 && rgb[2] == 0)      
-                  return true;
 
-            return false;
-      }
+}     
 
-      private boolean h_isYellow(int[] rgb)
-      {
+private int[] h_getPixelData(BufferedImage img, int x, int y) 
+{
 
-            if(rgb[0] == 255 && rgb[1] == 255 && rgb[2] == 0)      
-                  return true;
+    int h = img.getHeight(); 
+    int w = img.getWidth(); 
 
-            return false;
+    int rgb[];
 
-      }
+    if(x<0 || x==h || y<0 || y==w){
 
-      private boolean h_isBlue(int[] rgb)
-      {
+        rgb = new int[] {0,0,0};
 
-            if(rgb[0] == 0 && rgb[1] == 0 && rgb[2] == 255)      
-                  return true;
+    }
 
-            return false;
+    else {
 
-      }
+      int argb = img.getRGB(y,x);
 
-      private boolean h_isGreen(int[] rgb)
-      {
+      rgb = new int[] {
+          (argb >> 16) & 0xff, 
+          (argb >>  8) & 0xff, 
+          (argb      ) & 0xff
+      };
 
-            if(rgb[0] == 0 && rgb[1] == 255 && rgb[2] == 0)      
-                  return true;
+  }
 
-            return false;
+  return rgb;
+}
 
-      }
+public boolean h_isWhite(int[] rgb)
+{
+
+    if((rgb[0] > 250) && (rgb[1] > 250) && (rgb[2] > 250)) return true;
+    else return false;         
+}
+
+public boolean h_isRed(int[] rgb)
+{       
+    if(rgb[0] == 255 && rgb[1] == 0 && rgb[2] == 0)      
+      return true;
+
+  return false;
+}
+
+private boolean h_isYellow(int[] rgb)
+{
+
+    if(rgb[0] == 255 && rgb[1] == 255 && rgb[2] == 0)      
+      return true;
+
+  return false;
+
+}
+
+private boolean h_isBlue(int[] rgb)
+{
+
+    if(rgb[0] == 0 && rgb[1] == 0 && rgb[2] == 255)      
+      return true;
+
+  return false;
+
+}
+
+private boolean h_isGreen(int[] rgb)
+{
+
+    if(rgb[0] == 0 && rgb[1] == 255 && rgb[2] == 0)      
+      return true;
+
+  return false;
+
+}
 }

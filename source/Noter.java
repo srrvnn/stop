@@ -46,7 +46,7 @@ public class Noter {
         name_tofile = new String(s);
     }
     
-    public void SetCondition(String s)
+    public void setCondition(String s)
     {
         code_condition = new String(s);
     }
@@ -164,7 +164,7 @@ public class Noter {
                 return false;          
         }
 
-        if(code_condition.equals("RemoveNotRed"))
+        if(code_condition.equals("NoNotRed"))
         {
             if(s.contains(",notred"))
                 return false; 
