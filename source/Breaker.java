@@ -234,7 +234,7 @@ public class Breaker {
     public boolean h_isWhite(int[] rgb)
     {
         
-        if(rgb[0] > 160) return true;
+        if(rgb[0] > 250 && rgb[1] > 250 && rgb[2] > 250) return true;
         else return false;         
         
     }
@@ -249,7 +249,7 @@ public class Breaker {
     
     public boolean h_isRed(int[] rgb)
     {       
-        if(rgb[0] == 255 && rgb[1] == 0 && rgb[2] == 0)      
+        if(rgb[0] > 230 && rgb[1] < 25 && rgb[2] < 25)      
             return true;
 
         return false;
@@ -258,7 +258,7 @@ public class Breaker {
     private boolean h_isYellow(int[] rgb)
     {
 
-        if(rgb[0] == 255 && rgb[1] == 255 && rgb[2] == 0)      
+        if(rgb[0] > 230 && rgb[1] > 230 && rgb[2] < 25)      
             return true;
         
         return false;
@@ -268,7 +268,7 @@ public class Breaker {
     private boolean h_isBlue(int[] rgb)
     {
 
-        if(rgb[0] == 0 && rgb[1] == 0 && rgb[2] == 255)      
+        if(rgb[0] < 25 && rgb[1] < 25 && rgb[2] > 230)      
             return true;
         
         return false;
@@ -278,7 +278,7 @@ public class Breaker {
     private boolean h_isGreen(int[] rgb)
     {
 
-        if(rgb[0] == 0 && rgb[1] == 255 && rgb[2] == 0)      
+        if(rgb[0] < 25 && rgb[1] > 230 && rgb[2] < 25)      
             return true;
         
         return false;

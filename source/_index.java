@@ -5,8 +5,8 @@ import java.util.*;
 
 public class _index {
 
-    static String[] f = {"R","G","B"};
-    static String[] features = {"R","G","B","H","S","I"};
+    static String[] RGB = {"R","G","B"};
+    static String[] RGBHSI = {"R","G","B","H","S","I"};
 
     static String[] c = {"red","notred","ambiguous"};
     static String[] call = {"red","notred","ambiguousred","ambiguousnotred"};
@@ -46,7 +46,7 @@ public class _index {
         
         onoter.SetFromFile("trainpixels.txt");
         onoter.SetToFile("screener.arff");        
-        onoter.SetFeatures(f);      
+        onoter.SetFeatures(RGB);      
         onoter.setClasses(c); 
         onoter.setCondition("NoNotRed"); 
         onoter.setModify(true);
@@ -54,7 +54,7 @@ public class _index {
 
         // onoter.SetFromFile("trainpixels.txt");
         // onoter.SetToFile("ambiguous.arff");        
-        // onoter.SetFeatures(f);   
+        // onoter.SetFeatures(RGB);   
         // onoter.setClasses(call);
         // onoter.setModify(false); 
         // onoter.SetCondition("OnlyAmbiguous");     
@@ -62,7 +62,7 @@ public class _index {
 
         // onoter.SetFromFile("testpixels.txt");
         // onoter.SetToFile("test.arff");        
-        // onoter.SetFeatures(f);  
+        // onoter.SetFeatures(RGB);  
         // onoter.setClasses(c); 
         // onoter.setModify(true);
         // onoter.SetCondition("");     
@@ -84,17 +84,18 @@ public class _index {
         // d.RebuildImageswithA();        
 
         //--------------------------------
-        //-- Cluster all pixels and store them in three files.
+        //-- Cluster all pixels and store them in as many files.
 
-        int k = 60;
+        int k = 100;
 
         Clusterer oclusterer = new Clusterer(); 
 
-        String[] train_clusters = {"clustercenters.txt","clusters-train",".txt"};
+        String[] train_clusters = {"clusters-train",".txt"};
         String[] test_clusters = {"clusters-test",".txt"};
 
         oclusterer.setSource("screener.arff");               
-        oclusterer.setResults(train_clusters,test_clusters,k);        
+        oclusterer.setNumber(k);
+        oclusterer.setResults(train_clusters,"clustercenters.txt",test_clusters);        
         oclusterer.run();          
 
         oclusterer.assign("testpixels.txt","clustercenters.txt","cluster-assignments.txt");
@@ -102,37 +103,40 @@ public class _index {
         Analyser oanalyser = new Analyser();        
         ArrayList<String> classes = new ArrayList<String>();
 
-        for( int i = 0; i < k; i++) {
+        oanalyser.setNumber(k);
+        oanalyser.setFile(train_clusters);
 
-            oanalyser.setFile("clusters-train"+i+".txt");
-            oanalyser.countClasses();  
+        oanalyser.run();        
 
-            classes.add(i,oanalyser.getMajority());
+        // oanalyser.substituteClasses("cluster-assignments.txt","cluster-results.txt");
+        // oanalyser.compareClasses("testpixels.txt","cluster-results.txt");    
 
-        }
+        // oanalyser.printRadius("clustercenters.txt");    
 
-        // oanalyser.countMajority();    
-        oanalyser.substituteClasses("cluster-assignments.txt","cluster-results.txt",classes);
-        oanalyser.compareClasses("testpixels.txt","cluster-results.txt");
+        oanalyser.fileLogs();
 
-        System.exit(1);
+        ColorCube ocube =  new ColorCube();
+        ocube.draw(k,oanalyser.getClasses());
+
+        // ColorCubeExample ocube = new ColorCubeExample(k);
+        // ocube.draw(classes);        
 
         //--------------------------------
         //-- Make three seperate training files with the points the three clustered pixels files.        
 
         // onoter.SetFromFile("aclassifier.txt");
         // onoter.SetToFile("aclassifier.arff");
-        // onoter.SetFeatures(f);
+        // onoter.SetFeatures(RGB);
         // onoter.noteFeatures("aclassifier");
 
         // onoter.SetFromFile("bclassifier.txt");
         // onoter.SetToFile("bclassifier.arff");
-        // onoter.SetFeatures(f);
+        // onoter.SetFeatures(RGB);
         // onoter.noteFeatures("bclassifier");
 
         // onoter.SetFromFile("cclassifier.txt");
         // onoter.SetToFile("cclassifier.arff");
-        // onoter.SetFeatures(f);
+        // onoter.SetFeatures(RGB);
         // onoter.noteFeatures("cclassifier");                           
 
         //-- TESTING MODULE TO LABEL IMAGES
@@ -148,7 +152,7 @@ public class _index {
 
         // onoter.SetFromFile("atest.txt");
         // onoter.SetToFile("atest.arff");
-        // onoter.SetFeatures(f);
+        // onoter.SetFeatures(RGB);
         // onoter.noteFeatures("atest");
 
         // otester.setTrainFile("aclassifier.arff","aclassifier");        
@@ -158,7 +162,7 @@ public class _index {
 
         // onoter.SetFromFile("btest.txt");
         // onoter.SetToFile("btest.arff");
-        // onoter.SetFeatures(f);
+        // onoter.SetFeatures(RGB);
         // onoter.noteFeatures("btest");
 
         // otester.setTrainFile("bclassifier.arff","bclassifier");        
@@ -168,7 +172,7 @@ public class _index {
 
         // onoter.SetFromFile("ctest.txt");
         // onoter.SetToFile("ctest.arff");
-        // onoter.SetFeatures(f);
+        // onoter.SetFeatures(RGB);
         // onoter.noteFeatures("ctest");  
 
         // otester.setTrainFile("cclassifier.arff","cclassifier");        

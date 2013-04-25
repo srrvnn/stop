@@ -13,8 +13,9 @@ import weka.filters.unsupervised.attribute.Remove;
 public class Clusterer
 {
 
-	String file_source; 
-	String[] file_trainclusters;     
+	  String file_source; 
+    String file_centers;
+	  String[] file_trainclusters;     
     String[] file_testclusters;
     String code_condition; 
     // ArrayList[] points_clusters; 
@@ -27,24 +28,31 @@ public class Clusterer
         // points_clusters = new ArrayList[3];
     }
 
-	public void setSource(String s)
-	{
+	public void setSource(String s){
+
 		file_source = s; 
 	}
 
-	public void setResults(String[] s, String[] t, int n)
-	{
-		file_trainclusters = s; 
-        file_testclusters = t;
-        number_clusters = n;
+  public void setNumber(int k){
+
+    number_clusters = k;
+  }
+
+	public void setResults(String[] s, String c, String[] t){
+
+		  file_trainclusters = s; 
+      file_testclusters = t;
+      file_centers = c;      
 	}
 
 	public void run() throws FileNotFoundException, IOException, Exception
 	{
 
+        System.out.format("%8d - Clustering pixels...\n",number_clusters);
+
         int counter;
 
-		BufferedReader cr = new BufferedReader(new FileReader("../_logs/"+file_source));
+		    BufferedReader cr = new BufferedReader(new FileReader("../_logs/"+file_source));
        	Instances cd = new Instances(cr);
 
        	String[] options = new String[2];
@@ -64,7 +72,7 @@ public class Clusterer
        	kmeans.setMaxIterations(1500);
        	kmeans.buildClusterer(nd);
 
-       	BufferedWriter cw0 = new BufferedWriter(new FileWriter("../_logs/"+file_trainclusters[0]));
+       	BufferedWriter cw0 = new BufferedWriter(new FileWriter("../_logs/"+file_centers));
 
         for(counter = 0; counter < number_clusters ; counter++)
         {
@@ -85,7 +93,7 @@ public class Clusterer
               for(counter = 0; counter < number_clusters; counter++){
 
                      String number = Integer.toString(counter);
-                     cw[counter] = new BufferedWriter((new FileWriter("../_logs/"+file_trainclusters[1]+number+file_trainclusters[2])));
+                     cw[counter] = new BufferedWriter((new FileWriter("../_logs/"+file_trainclusters[0]+number+file_trainclusters[1])));
               }
        							
 
