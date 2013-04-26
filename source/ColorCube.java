@@ -28,7 +28,7 @@ public class ColorCube {
 
 		for(int i = 0; i < k; i++){			
 
-				double[][] pc1 = ColorCube.getPointsFromClusterFile("clusters-train" + i +".txt");			
+				double[][] pc1 = getPointsFromClusterFile("clusters-train" + i +".txt");			
 				add(pc1);						
 		}				
 		
@@ -45,12 +45,12 @@ public class ColorCube {
 		double[][] left = { {0,0,0}, {255,0,0}, {255,0,255}, {0,0,255}, {0,0,0}};
 				
 		
-		//add cube to the draw set
-		plot.addLinePlot("",Color.red, bottom);
-		plot.addLinePlot("",Color.red, top);
-		plot.addLinePlot("",Color.red, front);
-		plot.addLinePlot("",Color.red, back);
-		plot.addLinePlot("",Color.red, left);
+		//add cube to the draw set		
+		plot.addLinePlot("",Color.BLACK, bottom);
+		plot.addLinePlot("",Color.BLACK, top);
+		plot.addLinePlot("",Color.BLACK, front);
+		plot.addLinePlot("",Color.BLACK, back);
+		plot.addLinePlot("",Color.BLACK, left);
 	}
 	
 	
@@ -80,7 +80,7 @@ public class ColorCube {
 	}
 	
 	
-	public static double[][] getPointsFromClusterFile(String filename)
+	public double[][] getPointsFromClusterFile(String filename)
 	{
 
 		// System.out.println("Cluster Filing Check");
@@ -122,7 +122,17 @@ public class ColorCube {
 			points[i][2] = pointsArrayList.get(i).z;
 		}
 		return points;
-	}
+	}	
+
+	public class Point3D
+	{
 	
+		public double x,y,z;
+		public Point3D(int x, int y, int z) {
+			this.x = x; this.y = y; this.z = z;
+		}
+	}
 
 }
+
+

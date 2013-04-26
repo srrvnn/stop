@@ -86,7 +86,7 @@ public class _index {
         //--------------------------------
         //-- Cluster all pixels and store them in as many files.
 
-        int k = 100;
+        int k = 10;
 
         Clusterer oclusterer = new Clusterer(); 
 
