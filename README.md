@@ -1,9 +1,16 @@
-project-stop
+introduction
 ------------
-Utility functions and wrapper classes to use WEKA machine learning libraries for image processing research.
+wrapper classes and utility functions for pixel-wise image processing and machine learning algorithms. 
 
-How to use?
+usage:
 ------------
-Run source/_index.java. 
+the files can be used in two ways: 
 
-Documentation in process. Will be updated shortly.
+* for single step processing needs 
+* for pipeline based multi step processing needs
+ 
+
+details: 
+------------------------
+
+detailed documentation available at docs/code.docx
