@@ -117,12 +117,9 @@ public class _index {
 
         oanalyser.fileLogs();
 
-        ColorCube ocube =  new ColorCube();
+        Cuber ocube =  new Cuber();
         ocube.draw(k,oanalyser.getClasses());
-
-        // ColorCubeExample ocube = new ColorCubeExample(k);
-        // ocube.draw(classes);        
-
+        
         //--------------------------------
         //-- Make three seperate training files with the points the three clustered pixels files.        
 

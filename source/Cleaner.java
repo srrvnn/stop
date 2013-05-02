@@ -1,5 +1,7 @@
-import java.io.*;
-import java.util.*;
+// @author srrvnn
+
+import java.io.File;
+import java.util.ArrayList;
 
 public class Cleaner{
 
@@ -7,7 +9,7 @@ public class Cleaner{
 
 	public void deleteFilesFromFolder(String nameFolder) {
 
-		ArrayList<String> ListFiles = getFiles(new File("../"+nameFolder));
+		ArrayList<String> ListFiles = h_getFiles(new File("../"+nameFolder));
 
 		for(String f : ListFiles){
 
@@ -16,7 +18,7 @@ public class Cleaner{
 		}
 	}
 
-	private ArrayList<String> getFiles(final File folder)
+	private ArrayList<String> h_getFiles(final File folder)
     {        
         ArrayList<String> list_files = new ArrayList<String>();
 
@@ -26,7 +28,7 @@ public class Cleaner{
 	            
 	            if(tEntry.isDirectory()){
 	                
-	                list_files.addAll(getFiles(tEntry));
+	                list_files.addAll(h_getFiles(tEntry));
 	            }
 	            
 	            else {  

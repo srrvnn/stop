@@ -1,3 +1,5 @@
+// @author qqibrow
+
 // package plot;
 
 import java.awt.Color;
@@ -9,14 +11,14 @@ import javax.swing.JFrame;
 
 import org.math.plot.Plot3DPanel;
 
-public class ColorCube {
+public class Cuber {
 
 	ArrayList<double[][]> clustersArrayList = new ArrayList<double[][]>();
 	Plot3DPanel plot = new Plot3DPanel();
 
 	ArrayList<String> classes; 
 	
-	public ColorCube(){
+	public Cuber(){
 		
 	}
 
