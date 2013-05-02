@@ -37,9 +37,7 @@ public class _index {
         
         obreaker.getImagesFromFolder("_labels");
         obreaker.collectPixelsToTrain("trainpixels.txt");
-        obreaker.collectPixelsToTest("testpixels.txt");    
-
-        System.exit(1);
+        obreaker.collectPixelsToTest("testpixels.txt");            
   
         //--------------------------------
         //-- Make training .arff file with all the pixels in the train pixels file.        
@@ -113,12 +111,11 @@ public class _index {
         // oanalyser.substituteClasses("cluster-assignments.txt","cluster-results.txt");
         // oanalyser.compareClasses("testpixels.txt","cluster-results.txt");    
 
-        // oanalyser.printRadius("clustercenters.txt");    
-
+        oanalyser.printRadius("clustercenters.txt");    
         oanalyser.fileLogs();
 
-        Cuber ocube =  new Cuber();
-        ocube.draw(k,oanalyser.getClasses());
+        // Cuber ocube =  new Cuber();
+        // ocube.draw(k,oanalyser.getClasses());
         
         //--------------------------------
         //-- Make three seperate training files with the points the three clustered pixels files.        

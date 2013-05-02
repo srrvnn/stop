@@ -1,6 +1,7 @@
 import java.io.*;
 import java.util.*;
 
+import java.util.Arrays;
 import java.util.ArrayList;
 
 public class Analyser {
@@ -31,7 +32,6 @@ public class Analyser {
 		logs = new ArrayList<String>();
 		logs.add("--");
 		logs.add("Analyser class instantiated. Logs:");	
-
 	}
 
 	//---- SET AND GET FUNCTIONS
@@ -157,11 +157,27 @@ public class Analyser {
 
 	public void printRadius(String cfile) throws FileNotFoundException, IOException, Exception{
 
+		// needs information from the ArrayList 'classes', hence must be called after run(). 
+
 		BufferedReader br = new BufferedReader(new FileReader("../_logs/"+cfile));
 		String line; 
 
-		int min = Integer.MAX_VALUE, max = Integer.MIN_VALUE, average = 0, count = 0, sum = 0;
-		int count2 = 0 ;
+		int numberOfClasses = 2;
+
+		int[] min = new int[numberOfClasses];
+		int[] max = new int[numberOfClasses];
+		int[] average = new int[numberOfClasses];
+		int[] sum = new int[numberOfClasses];
+		int[] count = new int[numberOfClasses];
+
+		Arrays.fill(min, Integer.MAX_VALUE);
+		Arrays.fill(max, Integer.MIN_VALUE);
+		Arrays.fill(average, 0);
+		Arrays.fill(sum, 0);
+		Arrays.fill(count, 0);
+
+		int count2 = -1;
+		int colorindex = -1; 
 
 		int[] red = {255,0,0};	
 
@@ -169,32 +185,42 @@ public class Analyser {
 
 			String classvalue = new String();					
 
-			classvalue = classes.get(count2++);
+			classvalue = classes.get(++count2);
 
-			if(!classvalue.contains("red"))
-				continue;
+			if(classvalue.contains("red"))
+				colorindex = 0;
 
-			count++;
+			if(classvalue.contains("ambiguous"))
+				colorindex = 1; 
 
 			int temp = h_distance(red,line);
 
-			sum += temp;
+			++count[colorindex];
+			sum[colorindex] += temp;
 
-			if(temp < min)
-				min = temp;
+			if(temp < min[colorindex])
+				min[colorindex] = temp;
 
-			if(temp > max)
-				max = temp;
+			if(temp > max[colorindex])
+				max[colorindex] = temp;
 		}
 
-		average = (int)sum/count;
+		for(int i =0; i<numberOfClasses; i++){
 
-		System.out.println("Min Radius : "+min);
-		System.out.println("Max Radius : "+max);
-		System.out.println("Average Radius : "+average);
+			if(i==0) System.out.println("Values for Red:");
+			if(i==1) System.out.println("Values for Ambiguous:");
+
+			average[i] = (int)sum[i]/count[i];
+			System.out.println("Min Radius : "+min[i]);
+			System.out.println("Max Radius : "+max[i]);
+			System.out.println("Average Radius : "+average[i]);
+
+			System.out.println("---------------------------");
+
+		}		
 	}
 
-	public void printLogs() {		
+	public void printLogs() {
 
 		if(logs.isEmpty()){
 			System.out.println("No logs available.");
@@ -202,8 +228,7 @@ public class Analyser {
 		}
 
 		for(String s : logs)
-			System.out.println(s);
-		
+			System.out.println(s);		
 	}
 
 	public void fileLogs() throws FileNotFoundException, IOException {
@@ -308,8 +333,7 @@ public class Analyser {
 		}		
 	}	
 
-   private int h_distance(int[] point, String center)
-   {      
+   private int h_distance(int[] point, String center){      
           String[] string_centers = center.split(",");
 
           float[] centers = {0,0,0};
@@ -329,4 +353,5 @@ public class Analyser {
 
           return distance;
    }
+
 }

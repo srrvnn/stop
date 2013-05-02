@@ -22,8 +22,6 @@ public class Noter {
         list_features = null;
         list_classes = null;
         test = false;    
-
-
         
         attributetypes = new HashMap();
 
