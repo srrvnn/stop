@@ -1,26 +1,26 @@
-// package imageresearch;
+// @author srrvnn
 
-import java.io.*;
-import java.util.*;
+import java.lang.Exception;
+import java.io.IOException;
+import java.io.FileNotFoundException;
+
+import java.util.ArrayList;
 
 public class _index {
 
+    //----- static features list
+
     static String[] RGB = {"R","G","B"};
     static String[] RGBHSI = {"R","G","B","H","S","I"};
+
+    //----- static classes list 
 
     static String[] c = {"red","notred","ambiguous"};
     static String[] call = {"red","notred","ambiguousred","ambiguousnotred"};
 
     public static void main(String[] args) throws IOException, FileNotFoundException, Exception {
 
-        //-- TESTING BED
-
-        // Clusterer tclusterer = new Clusterer();
-        // tclusterer.assign("testpi.txt","clustercenters.txt","cluster-results.txt");
-
-        // System.exit(1);
-
-        //-- CLEAN ALL FILES THAT WERE CREATED IN THE LAST RUN
+        //-- CLEAN FILES CREATED IN THE LAST RUN 
 
         Cleaner ocleaner = new Cleaner();
 
@@ -38,6 +38,8 @@ public class _index {
         obreaker.getImagesFromFolder("_labels");
         obreaker.collectPixelsToTrain("trainpixels.txt");
         obreaker.collectPixelsToTest("testpixels.txt");    
+
+        System.exit(1);
   
         //--------------------------------
         //-- Make training .arff file with all the pixels in the train pixels file.        
