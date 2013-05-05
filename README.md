@@ -13,4 +13,4 @@ the files can be used in two ways:
 details: 
 ------------------------
 
-detailed documentation available at docs/code.docx
+detailed documentation will available at docs/code.docx
