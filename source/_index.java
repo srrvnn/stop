@@ -86,7 +86,7 @@ public class _index {
         //--------------------------------
         //-- Cluster all pixels and store them in as many files.
 
-        int k = 10;
+        int k = 70;
 
         Clusterer oclusterer = new Clusterer(); 
 
@@ -107,11 +107,20 @@ public class _index {
         oanalyser.setFile(train_clusters);
 
         oanalyser.run();        
+        oanalyser.computeRadius("clustercenters.txt");    
 
-        // oanalyser.substituteClasses("cluster-assignments.txt","cluster-results.txt");
-        // oanalyser.compareClasses("testpixels.txt","cluster-results.txt");    
+        oanalyser.substituteClassesC("cluster-assignments.txt","cluster-results1.txt");
+        oanalyser.substituteClassesR("cluster-assignments.txt","cluster-results2.txt");
 
-        oanalyser.printRadius("clustercenters.txt");    
+        System.out.println("----------------------------------------"); 
+        System.out.println("Using the nearest cluster center method:");
+        oanalyser.compareClasses("testpixels.txt","cluster-results1.txt");    
+
+        System.out.println("----------------------------------------");
+        System.out.println("Using the radius method:");
+        oanalyser.compareClasses("testpixels.txt","cluster-results2.txt");    
+
+        
         oanalyser.fileLogs();
 
         // Cuber ocube =  new Cuber();

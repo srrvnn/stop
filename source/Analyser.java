@@ -19,6 +19,7 @@ public class Analyser {
 	Map<String, Integer> counterMajority;	
 
 	int total, sum, number;
+	int r1, r2;
 	
 	Analyser() {
 
@@ -35,7 +36,6 @@ public class Analyser {
 	}
 
 	//---- SET AND GET FUNCTIONS
-
 
 	public void setNumber(int k){
 
@@ -89,7 +89,7 @@ public class Analyser {
 
 	}
 
-	void substituteClasses(String file, String dfile) throws FileNotFoundException, IOException, Exception{
+	void substituteClassesC(String file, String dfile) throws FileNotFoundException, IOException, Exception{
 
 		BufferedReader br = new BufferedReader(new FileReader("../_logs/"+file));
 		BufferedWriter bw = new BufferedWriter(new FileWriter("../_logs/"+dfile));
@@ -108,6 +108,55 @@ public class Analyser {
 				String[] items = line.split(",");
 				String write = new String(items[0]+","+items[1]+","+items[2]+","+classes.get(Integer.parseInt(items[items.length-1])));
 						bw.write(write); bw.newLine();			
+				
+			}
+			
+		}
+
+		br.close(); bw.close(); 
+
+	}
+
+	void substituteClassesR(String file, String dfile) throws FileNotFoundException, IOException, Exception{
+
+		BufferedReader br = new BufferedReader(new FileReader("../_logs/"+file));
+		BufferedWriter bw = new BufferedWriter(new FileWriter("../_logs/"+dfile));
+
+		String line; 
+
+		while((line = br.readLine()) != null){
+
+			if(line.contains("%") || line.equals("") || line ==  null) {
+
+				bw.write(line); bw.newLine();
+			}
+				
+			else {	
+				
+				int[] red = {255,0,0};	
+				int distance = h_distance(red, line);	
+
+				String[] items = line.split(",");			
+				String write = new String();
+
+				 if(distance < r1){
+
+				 	write = new String(items[0]+","+items[1]+","+items[2]+",red");
+				 }
+				 	
+
+				if(distance > r2){
+
+					write = new String(items[0]+","+items[1]+","+items[2]+",notred"); 
+				}
+				
+
+				else{
+
+					write = new String(items[0]+","+items[1]+","+items[2]+",ambiguous");
+				}				
+				
+				bw.write(write); bw.newLine();			
 				
 			}
 			
@@ -155,7 +204,7 @@ public class Analyser {
 
 	}
 
-	public void printRadius(String cfile) throws FileNotFoundException, IOException, Exception{
+	public void computeRadius(String cfile) throws FileNotFoundException, IOException, Exception{
 
 		// needs information from the ArrayList 'classes', hence must be called after run(). 
 
@@ -207,17 +256,86 @@ public class Analyser {
 
 		for(int i =0; i<numberOfClasses; i++){
 
-			if(i==0) System.out.println("Values for Red:");
-			if(i==1) System.out.println("Values for Ambiguous:");
+			// System.out.println("---------------------------");
+
+			// if(i==0) System.out.println("Values for Red:");
+			// if(i==1){
+
+			// 	System.out.println("Values for Ambiguous:");
+			// 	r2 = max[i];
+			// } 
 
 			average[i] = (int)sum[i]/count[i];
-			System.out.println("Min Radius : "+min[i]);
-			System.out.println("Max Radius : "+max[i]);
-			System.out.println("Average Radius : "+average[i]);
+			// System.out.println("Min Radius : "+min[i]);
+			// System.out.println("Max Radius : "+max[i]);
+			// System.out.println("Average Radius : "+average[i]);		
+
+		}	
+
+		br.close();
+		br = new BufferedReader(new FileReader("../_logs/"+cfile));
+
+		int[] sumvariance = new int[numberOfClasses];
+		int[] variance = new int[numberOfClasses];
+		int[] sd = new int[numberOfClasses];
+
+		Arrays.fill(sumvariance, 0);
+		Arrays.fill(variance, 0);
+		Arrays.fill(count, 0);
+		Arrays.fill(sd, 0);
+
+		count2 = -1;
+
+		while((line = br.readLine()) != null){
+
+			String classvalue = new String();					
+
+			classvalue = classes.get(++count2);
+
+			if(classvalue.contains("red"))
+				colorindex = 0;
+
+			if(classvalue.contains("ambiguous"))
+				colorindex = 1; 
+
+			int temp = h_distance(red,line);
+
+			++count[colorindex];
+
+			int a = average[colorindex] - temp;	
+			sumvariance[colorindex] += (int)Math.pow((double)a,2);
+		}	
+
+		for(int i =0; i<numberOfClasses; i++){
+
+			variance[i] = (int)sumvariance[i]/count[i];
+			sd[i] = (int)Math.sqrt((double)variance[i]);
 
 			System.out.println("---------------------------");
 
-		}		
+			if(i==0){
+
+				System.out.println("Values for Red:");	
+				r1 = average[i]+sd[i];
+				System.out.println("r1:"+r1);
+			} 
+			if(i==1){
+
+				System.out.println("Values for Ambiguous:");
+				r2 = max[i];
+				System.out.println("r2:"+r2);
+			} 
+
+			System.out.println("Min Radius : "+min[i]);
+			System.out.println("Max Radius : "+max[i]);
+			System.out.println("Average Radius : "+average[i]);		
+			System.out.println("Standard Deviation: "+sd[i]);
+
+
+
+		}	
+
+
 	}
 
 	public void printLogs() {
@@ -333,7 +451,8 @@ public class Analyser {
 		}		
 	}	
 
-   private int h_distance(int[] point, String center){      
+   private int h_distance(int[] point, String center){ 
+
           String[] string_centers = center.split(",");
 
           float[] centers = {0,0,0};
