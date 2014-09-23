@@ -16,6 +16,8 @@ import javax.imageio.ImageIO;
 
 public class Cohener {
 
+    private static final String folder_anntation = "_annotation";
+
 	ArrayList<String> logs;
 
 	String folder; 
@@ -286,8 +288,7 @@ public class Cohener {
 
 	//-- List all source images, ignoring ones with 'l-' in their names.
 
-	private ArrayList<String> h_getFiles(final File f)
-    {
+	private ArrayList<String> h_getFiles(final File f) {
 
     	File folder_files = f;
 
@@ -324,6 +325,8 @@ public class Cohener {
         return list_files;        
     }
 
+    // function to compute the label name given the name of an image
+
     private String h_getLabelName(String s){
 
     	String sourcename = s; 
@@ -334,18 +337,11 @@ public class Cohener {
         String labelname = t1+t2.substring(0,t2.indexOf("."))+"l."+t2.substring(t2.indexOf(".")+1);
 
         return labelname;
-    }
+    }    
 
-    private boolean h_isWhite(int[] rgb)
-    {
-        
-        if(rgb[0] > 230 && rgb[1] > 230 && rgb[2] > 230) return true;
-        else return false;         
-        
-    }
+    // function to retreive a pixel's rgb values given the image and index
 
-    private int[] h_getPixelData(BufferedImage img, int x, int y) 
-    {
+    private int[] h_getPixelData(BufferedImage img, int x, int y) {
         
         int h = img.getHeight(); 
         int w = img.getWidth(); 
@@ -371,44 +367,45 @@ public class Cohener {
         }
       
         return rgb;
-
     }
 
-    public boolean h_isRed(int[] rgb)
-    {       
+    // function to detect colors in the labelled pixels 
+
+    private boolean h_isWhite(int[] rgb) {
+        
+        if(rgb[0] > 230 && rgb[1] > 230 && rgb[2] > 230) return true;
+        else return false;                 
+    }
+
+    public boolean h_isRed(int[] rgb) {
+
         if(rgb[0] > 230 && rgb[1] < 25 && rgb[2] < 25)      
             return true;
 
         return false;
     }
 
-    private boolean h_isYellow(int[] rgb)
-    {
+    private boolean h_isYellow(int[] rgb) {
 
         if(rgb[0] > 230 && rgb[1] > 230 && rgb[2] < 25)      
             return true;
         
         return false;
-
     }
 
-    private boolean h_isBlue(int[] rgb)
-    {
+    private boolean h_isBlue(int[] rgb) {
 
         if(rgb[0] < 25 && rgb[1] < 25 && rgb[2] > 230)      
             return true;
         
         return false;
-
     }
 
-    private boolean h_isGreen(int[] rgb)
-    {
+    private boolean h_isGreen(int[] rgb) {
 
         if(rgb[0] < 25 && rgb[1] > 230 && rgb[2] < 25)      
             return true;
         
         return false;
-
     }
 }

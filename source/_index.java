@@ -119,7 +119,6 @@ public class _index {
         System.out.println("----------------------------------------");
         System.out.println("Using the radius method:");
         oanalyser.compareClasses("testpixels.txt","cluster-results2.txt");    
-
         
         oanalyser.fileLogs();
 
@@ -199,9 +198,11 @@ public class _index {
 
     }
 
+    // helper functions to print messages with newlines easily
+
     private static void show(String message){
         
-        show(1,message);        
+        show(1, message);        
     }
 
     private static void show(int newline, String message){
